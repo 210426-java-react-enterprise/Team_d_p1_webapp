@@ -1,24 +1,29 @@
-package test.com.revature.services; 
+package com.revature.services;
 
-import org.junit.Test; 
+import org.junit.Test;
 import org.junit.Before; 
-import org.junit.After; 
+import org.junit.After;
+
+import static org.junit.Assert.*;
 
 /** 
 * TaskService Tester. 
 * 
-* @author <Authors name> 
+* @author Nicholas Reicno
 * @since <pre>May 16, 2021</pre> 
 * @version 1.0 
 */ 
-public class TaskServiceTest { 
+public class TaskServiceTest {
+    TaskService sut;
 
 @Before
-public void before() throws Exception { 
+public void before() throws Exception {
+    sut = new TaskService();
 } 
 
 @After
-public void after() throws Exception { 
+public void after() throws Exception {
+    sut = null;
 } 
 
 /** 
