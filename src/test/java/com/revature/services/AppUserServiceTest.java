@@ -1,6 +1,10 @@
 package com.revature.services;
 
-import org.junit.Test; 
+import com.revature.entities.AppUser;
+import com.revature.exceptions.invalid.InvalidEmailException;
+import com.revature.exceptions.invalid.InvalidPasswordException;
+import com.revature.exceptions.invalid.InvalidUsernameException;
+import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 
@@ -28,32 +32,53 @@ public class AppUserServiceTest {
 
     /**
     *
-    * Method: verify(String username, String password)
-    *
-    */
-    @Test
-    public void testVerify() throws Exception {
-//TODO: Test goes here... 
-} 
-
-    /**
-    *
-    * Method: validatePotentialUserInfo(String password, String username, String email)
-    *
-    */
-    @Test
-    public void testValidatePotentialUserInfo() throws Exception {
-    //TODO: Test goes here...
-    }
-
-    /**
-    *
     * Method: registerUser()
     *
     */
     @Test
-    public void testRegisterUser() throws Exception {
+    public void testRegisterValidUser() throws Exception {
     //TODO: Test goes here...
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("9letters");
+        userToTest.setPassword("9letters");
+        userToTest.setEmail("email@test.com");
+
+        assertTrue(sut.registerUser(userToTest));
+    }
+
+    @Test(expected = InvalidUsernameException.class)
+    public void testRegisterUserWithInvalidName() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("two");
+        userToTest.setPassword("9letters");
+        userToTest.setEmail("email@test.com");
+
+        assertTrue(sut.registerUser(userToTest));
+    }
+
+    @Test(expected = InvalidPasswordException.class)
+    public void testRegisterUserWithInvalidPassword() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("9Letters");
+        userToTest.setPassword("two");
+        userToTest.setEmail("email@test.com");
+
+        sut.registerUser(userToTest);
+    }
+
+    @Test(expected = InvalidEmailException.class)
+    public void testRegisterUserWithInvalidEmail() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("9Letters");
+        userToTest.setPassword("9Letters");
+        userToTest.setEmail("emailtest.com");
+
+        sut.registerUser(userToTest);
+    }
+
+    @Test
+    public void testRegisterUserWithTakenUsernameOrEmail(){
+
     }
 
     /**

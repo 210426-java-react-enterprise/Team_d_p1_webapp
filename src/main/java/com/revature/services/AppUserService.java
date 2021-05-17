@@ -18,7 +18,7 @@ public class AppUserService {
             "|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
 
 //    TODO needs logic to lookup information that we obtain from database, most likely will pair to a session cache that gets created, different task and different branch though
-    public boolean verify(String username,String password){
+    private boolean verify(String username,String password){
         return true;
     }
 
@@ -41,7 +41,7 @@ public class AppUserService {
     }
 
 //    TODO Includes logic to check if username and email are available
-    public boolean validatePotentialUserInfo(String username,String email)throws UsernameTakenException, EmailTakenException {
+    private boolean validatePotentialUserInfo(String username,String email)throws UsernameTakenException, EmailTakenException {
         return true;
     }
 
@@ -55,11 +55,8 @@ public class AppUserService {
         if(!isValidEmail(userToBeRegistered.getEmail())){
             throw new InvalidEmailException();
         }
-        if(validatePotentialUserInfo(userToBeRegistered.getUsername(),userToBeRegistered.getEmail())){
-//    TODO logic to persist user to database and to then kick back to confirm it was persisted for testing
-            return true;
-        }
-        return false;
+        //    TODO logic to persist user to database and to then kick back to confirm it was persisted for testing
+        return validatePotentialUserInfo(userToBeRegistered.getUsername(), userToBeRegistered.getEmail());
     }
 
 //    TODO needs to either look at session cache, or go to database to check to attempt to log in user and obtain all the info needed
