@@ -9,7 +9,7 @@ public class TaskListService {
     private Task newTask;
 
     //    TODO
-    public void addTask() {
+    public void addTask(Task newTask) {
 
     }
 
