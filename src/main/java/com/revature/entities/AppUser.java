@@ -17,6 +17,10 @@ public class AppUser {
 
     private List<TaskList> taskList;
 
+    public AppUser(){
+
+    }
+
     public AppUser(String username, String password, String firstName, String lastName, String email, Date birthday) {
         this.username = username;
         this.password = password;
