@@ -55,6 +55,12 @@ public class AppUserService {
         if(!isValidEmail(userToBeRegistered.getEmail())){
             throw new InvalidEmailException();
         }
+        if(!isUsernameAvailable(userToBeRegistered.getUsername())){
+            throw new UsernameTakenException();
+        }
+        if(!isEmailAvailable(userToBeRegistered.getEmail())){
+            throw new EmailTakenException();
+        }
         //    TODO logic to persist user to database and to then kick back to confirm it was persisted for testing
         return validatePotentialUserInfo(userToBeRegistered.getUsername(), userToBeRegistered.getEmail());
     }
@@ -66,6 +72,18 @@ public class AppUserService {
             return new AppUser();
         }
         throw new UserNotFoundException();
+    }
+
+    public boolean isUsernameAvailable(String username) throws UsernameTakenException {
+        // TODO logic to check database for existing username
+
+        return true;
+    }
+
+    public boolean isEmailAvailable(String email) throws EmailTakenException {
+        // TODO logic to check database for existing email
+
+        return true;
     }
 
 }

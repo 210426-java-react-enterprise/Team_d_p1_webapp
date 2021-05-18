@@ -1,6 +1,9 @@
 package com.revature.services;
 
 import com.revature.entities.AppUser;
+import com.revature.exceptions.EmailTakenException;
+import com.revature.exceptions.UserNotFoundException;
+import com.revature.exceptions.UsernameTakenException;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
@@ -77,9 +80,37 @@ public class AppUserServiceTest {
     }
 
     @Test
-    public void testRegisterUserWithTakenUsernameOrEmail(){
-
+    public void testRegisterUserWithAvailableUsername() throws UsernameTakenException {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("Available");
+        assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
     }
+
+    @Test (expected = UsernameTakenException.class)
+    public void testRegisterUserWithTakenUsername() throws UsernameTakenException {
+        // Test case will fail
+
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("taken");
+        sut.isUsernameAvailable(userToTest.getUsername());
+    }
+
+    @Test
+    public void testRegisterUserWithAvailableEmail() throws EmailTakenException {
+        AppUser userToTest = new AppUser();
+        userToTest.setEmail("TestEmail@email.com");
+        assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
+    }
+
+    @Test (expected = EmailTakenException.class)
+    public void testRegisterUserWithTakenEmail() throws EmailTakenException {
+        // Test case will fail at this moment
+
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("TakenEmail@email.com");
+        sut.isEmailAvailable(userToTest.getEmail());
+    }
+
 
     /**
     *
@@ -88,7 +119,18 @@ public class AppUserServiceTest {
     */
     @Test
     public void testLoginUser() throws Exception {
-    //TODO: Test goes here...
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("TestUser");
+        userToTest.setPassword("Password12");
+        AppUser loginUserTest = sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
+        assertNotNull(loginUserTest);
+    }
+
+    @Test (expected = UserNotFoundException.class)
+    public void testLoginNullCredentials() throws UserNotFoundException {
+        // Test Will fail
+        AppUser userToTest = new AppUser();
+        sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
     }
 
 
