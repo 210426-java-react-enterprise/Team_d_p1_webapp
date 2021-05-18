@@ -8,6 +8,8 @@ public class Task {
     private LocalDateTime dateDue;
     private String taskTitle;
     private String taskMessage;
+    private String taskState;
+
 
     public Task(LocalDateTime dateCreated, LocalDateTime dateDue, String taskTitle, String taskMessage) {
         this.dateCreated = dateCreated;
@@ -46,5 +48,12 @@ public class Task {
 
     public void setTaskMessage(String taskMessage) {
         this.taskMessage = taskMessage;
+    }
+
+    public String getTaskState() {
+        return this.taskState;
+    }
+    public void setTaskState(String taskState) {
+        this.taskState = taskState;
     }
 }

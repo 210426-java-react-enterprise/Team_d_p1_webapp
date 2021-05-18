@@ -1,8 +1,12 @@
 package com.revature.services;
 
+import com.revature.entities.Task;
+
 import java.time.LocalDateTime;
 
 public class TaskListService {
+
+    private Task newTask;
 
     //    TODO
     public void addTask() {
