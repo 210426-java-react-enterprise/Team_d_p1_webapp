@@ -1,34 +1,33 @@
 package com.revature.entities;
 
-import java.time.LocalDateTime;
-//    TODO @Entity and @Table tags here
-public class Task {
-//    TODO @Column tags here
-    private LocalDateTime dateCreated;
-    private LocalDateTime dateDue;
-    private String taskTitle;
-    private String taskMessage;
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
+import com.revature.annotations.Table;
 
-    public Task(LocalDateTime dateCreated, LocalDateTime dateDue, String taskTitle, String taskMessage) {
-        this.dateCreated = dateCreated;
+@Table(name="tasks")
+@Entity
+public class Task {
+    @Column(columnName = "dateDue")
+    private String dateDue;
+    @Column(columnName = "title")
+    private String taskTitle;
+    @Column(columnName = "message")
+    private String taskMessage;
+    @Column(columnName = "taskState")
+    private String taskState;
+
+
+    public Task(String dateDue, String taskTitle, String taskMessage, String taskState) {
         this.dateDue = dateDue;
         this.taskTitle = taskTitle;
         this.taskMessage = taskMessage;
     }
 
-    public LocalDateTime getDateCreated() {
-        return dateCreated;
-    }
-
-    public void setDateCreated(LocalDateTime dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-    public LocalDateTime getDateDue() {
+    public String getDateDue() {
         return dateDue;
     }
 
-    public void setDateDue(LocalDateTime dateDue) {
+    public void setDateDue(String dateDue) {
         this.dateDue = dateDue;
     }
 
@@ -46,5 +45,12 @@ public class Task {
 
     public void setTaskMessage(String taskMessage) {
         this.taskMessage = taskMessage;
+    }
+
+    public String getTaskState() {
+        return this.taskState;
+    }
+    public void setTaskState(String taskState) {
+        this.taskState = taskState;
     }
 }
