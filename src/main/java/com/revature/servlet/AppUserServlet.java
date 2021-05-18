@@ -1,5 +1,13 @@
 package com.revature.servlet;
 
+import com.revature.entities.AppUser;
+import com.revature.exceptions.EmailTakenException;
+import com.revature.exceptions.UsernameTakenException;
+import com.revature.exceptions.invalid.InvalidEmailException;
+import com.revature.exceptions.invalid.InvalidPasswordException;
+import com.revature.exceptions.invalid.InvalidUsernameException;
+import com.revature.services.AppUserService;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -7,8 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class AppUserServlet extends HttpServlet {
+    private AppUserService service;
 
     //Ties into AppUserService here not present on this branch at this moment, will tie in when this is pushed
+    public AppUserServlet(AppUserService service){
+        this.service = service;
+    }
+
+    public AppUserServlet(){
+
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
@@ -35,9 +51,37 @@ public class AppUserServlet extends HttpServlet {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
+        String firstName = req.getParameter("firstName");
+        String lastName = req.getParameter("lastName");
+        int age = Integer.parseInt(req.getParameter("age"));
+
+        AppUser user = new AppUser();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        //  TODO Age either change to int ignore or do logic to determine the date
 
         // 2.) Service execution
-
+        try {
+            service.registerUser(user);
+        } catch (InvalidUsernameException e) {
+            resp.setStatus(400);
+            resp.getWriter().println("Invalid Username Specified!!!");
+        } catch (InvalidEmailException e) {
+            resp.setStatus(400);
+            resp.getWriter().println("Invalid Email Specified!!!");
+        } catch (InvalidPasswordException e) {
+            resp.setStatus(400);
+            resp.getWriter().println("Invalid Password specified");
+        } catch (UsernameTakenException e) {
+            resp.setStatus(400);
+            resp.getWriter().println("Username already taken!!!");
+        } catch (EmailTakenException e) {
+            resp.setStatus(400);
+            resp.getWriter().println("Email already taken!!!");
+        }
 
         // 3.) Persist to database
 
