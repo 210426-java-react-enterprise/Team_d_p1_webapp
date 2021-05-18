@@ -26,5 +26,9 @@ public class TaskListServlet extends HttpServlet {
 
         taskListService.addTask(newTask);
 
+        resp.setStatus(202);
+
+        resp.getWriter().print("Hello out there. Your user has been created");
+
     }
 }
