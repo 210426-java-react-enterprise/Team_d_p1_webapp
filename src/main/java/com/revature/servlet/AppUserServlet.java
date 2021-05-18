@@ -1,7 +1,9 @@
 package com.revature.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.AppUser;
 import com.revature.exceptions.EmailTakenException;
+import com.revature.exceptions.UserNotFoundException;
 import com.revature.exceptions.UsernameTakenException;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppUserServlet extends HttpServlet {
     private AppUserService service;
@@ -26,6 +30,11 @@ public class AppUserServlet extends HttpServlet {
 
     }
 
+    // get READ
+    // put UPDATE
+    // post CREATE
+    // delete DELETE
+    // patch special type of UPDATE
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
 
@@ -97,5 +106,34 @@ public class AppUserServlet extends HttpServlet {
         resp.setStatus(202);
         resp.getWriter().println("The user has been created " + username);
 
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
+        /*
+        JSON form for authenticate
+        {
+        "username":"",
+        "password":""
+        }
+         */
+        Map<String, Object> jsonMap = new ObjectMapper().readValue(req.getInputStream(),HashMap.class);
+       AppUser user = new AppUser();
+        try {
+            user = service.loginUser(jsonMap.get("username").toString(),jsonMap.get("password").toString());
+        } catch (UserNotFoundException e) {
+            resp.setStatus(400);
+            resp.getWriter().println("User Not Found, Please Register for an account or check your credentials!!!");
+        }
+        
+        resp.setStatus(202);
+        resp.getWriter().println("User Found, Logging In " + user.getUsername());
+    }
+
+    // Sets up a redirect call and a  forward in order
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.sendRedirect("https://www.google.com");
+        req.getRequestDispatcher("/someOtherResource").forward(req,resp);
     }
 }
