@@ -1,7 +1,9 @@
 package com.revature.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.AppUser;
 import com.revature.exceptions.EmailTakenException;
+import com.revature.exceptions.UserNotFoundException;
 import com.revature.exceptions.UsernameTakenException;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
@@ -13,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppUserServlet extends HttpServlet {
     private AppUserService service;
@@ -96,6 +101,28 @@ public class AppUserServlet extends HttpServlet {
         // 500 - Server Side Error
         resp.setStatus(202);
         resp.getWriter().println("The user has been created " + username);
+
+    }
+
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        InputStream json = req.getInputStream();
+
+        Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+        System.out.println(jsonMap);
+
+        AppUser user = null;
+        try {
+            user = service.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
+        } catch (UserNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(user == null) {
+            resp.getWriter().println("Please check your credentials");
+        } else {
+            resp.getWriter().println("Succesfully Logged In");
+        }
 
     }
 }

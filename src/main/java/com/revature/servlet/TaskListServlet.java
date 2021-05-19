@@ -26,9 +26,13 @@ public class TaskListServlet extends HttpServlet {
 
         taskListService.addTask(newTask);
 
+        // TODO persist to database
+
         resp.setStatus(202);
 
         resp.getWriter().print("Hello out there. Your user has been created");
 
     }
+
+
 }
