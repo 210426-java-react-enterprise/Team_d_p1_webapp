@@ -41,7 +41,7 @@ public class AppUserServiceTest {
     @Test
     public void testRegisterValidUser() throws Exception {
     //TODO: Test goes here...
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("9letters");
         userToTest.setPassword("9letters");
         userToTest.setEmail("email@test.com");
@@ -51,7 +51,7 @@ public class AppUserServiceTest {
 
     @Test(expected = InvalidUsernameException.class)
     public void testRegisterUserWithInvalidName() throws Exception {
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("two");
         userToTest.setPassword("9letters");
         userToTest.setEmail("email@test.com");
@@ -61,7 +61,7 @@ public class AppUserServiceTest {
 
     @Test(expected = InvalidPasswordException.class)
     public void testRegisterUserWithInvalidPassword() throws Exception {
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("9Letters");
         userToTest.setPassword("two");
         userToTest.setEmail("email@test.com");
@@ -71,7 +71,7 @@ public class AppUserServiceTest {
 
     @Test(expected = InvalidEmailException.class)
     public void testRegisterUserWithInvalidEmail() throws Exception {
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("9Letters");
         userToTest.setPassword("9Letters");
         userToTest.setEmail("emailtest.com");
@@ -81,7 +81,7 @@ public class AppUserServiceTest {
 
     @Test
     public void testRegisterUserWithAvailableUsername() throws UsernameTakenException {
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("Available");
         assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
     }
@@ -90,14 +90,14 @@ public class AppUserServiceTest {
     public void testRegisterUserWithTakenUsername() throws UsernameTakenException {
         // Test case will fail
 
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("taken");
         sut.isUsernameAvailable(userToTest.getUsername());
     }
 
     @Test
     public void testRegisterUserWithAvailableEmail() throws EmailTakenException {
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setEmail("TestEmail@email.com");
         assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
     }
@@ -106,7 +106,7 @@ public class AppUserServiceTest {
     public void testRegisterUserWithTakenEmail() throws EmailTakenException {
         // Test case will fail at this moment
 
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("TakenEmail@email.com");
         sut.isEmailAvailable(userToTest.getEmail());
     }
@@ -119,7 +119,7 @@ public class AppUserServiceTest {
     */
     @Test
     public void testLoginUser() throws Exception {
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         userToTest.setUsername("TestUser");
         userToTest.setPassword("Password12");
         AppUser loginUserTest = sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
@@ -129,7 +129,7 @@ public class AppUserServiceTest {
     @Test (expected = UserNotFoundException.class)
     public void testLoginNullCredentials() throws UserNotFoundException {
         // Test Will fail
-        AppUser userToTest = new AppUser();
+        AppUser userToTest = new AppUser(username, password, email, firstName, lastName);
         sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
     }
 
