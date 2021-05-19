@@ -20,16 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppUserServlet extends HttpServlet {
-    private AppUserService service;
-
-    //Ties into AppUserService here not present on this branch at this moment, will tie in when this is pushed
-    public AppUserServlet(AppUserService service){
-        this.service = service;
-    }
-
-    public AppUserServlet(){
-
-    }
+    private AppUserService service = new AppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {

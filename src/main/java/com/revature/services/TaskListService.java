@@ -8,13 +8,26 @@ public class TaskListService {
 
     private Task newTask;
 
-    //    TODO
+    //    TODO create database call to ORM to persist task
     public void addTask(Task newTask) {
+        System.out.println("Hypothetical task has been added: " + newTask.toString());
+    }
+
+    // TODO create database call to ORM to update task based on task Id
+    public void updateTask(Task task) {
+        System.out.println("Task Updated");
+    }
+
+    //    TODO create db call to remove task from task table by ID
+    public void removeTask(int taskId) {
+        System.out.println("Task has been deleted");
 
     }
 
-    //    TODO
-    public void removeTask() {
+    // TODO create db call that gets all tasks by username
+    public void getAllTasksByUsername(String username) {
+
+
 
     }
 
