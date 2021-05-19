@@ -69,7 +69,7 @@ public class AppUserService {
     public AppUser loginUser(String username, String password) throws UserNotFoundException {
         if(verify(username,password)){
 //            Logic call to pull info up here
-            return new AppUser();
+            return new AppUser("test", "test", "test", "test", "test@gmail.com", 34);
         }
         throw new UserNotFoundException();
     }
