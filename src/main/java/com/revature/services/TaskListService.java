@@ -27,8 +27,6 @@ public class TaskListService {
     // TODO create db call that gets all tasks by username
     public void getAllTasksByUsername(String username) {
 
-
-
     }
 
     //    TODO Generates a report of all tasks in a task list.

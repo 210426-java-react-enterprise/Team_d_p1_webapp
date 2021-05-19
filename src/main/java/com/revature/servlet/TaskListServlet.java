@@ -85,6 +85,6 @@ public class TaskListServlet extends HttpServlet {
 
         taskListService.getAllTasksByUsername(username);
 
-        resp.getWriter().println("");
+        resp.getWriter().println("All tasks for: " + username);
     }
 }
