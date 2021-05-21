@@ -27,11 +27,11 @@ public class ResultSetService {
         HashMap<String, Object> resultMap = new HashMap<>();
         LinkedList<HashMap> taskList = new LinkedList<>();
         while(rs.next()) {
-            resultMap.put("username", rs.getInt("username"));
+            resultMap.put("username", rs.getString("username"));
             resultMap.put("password", rs.getString("password"));
             resultMap.put("firstName", rs.getString("firstName"));
             resultMap.put("lastName", rs.getString("lastName"));
-            resultMap.put("email", rs.getBoolean("email"));
+            resultMap.put("email", rs.getString("email"));
             resultMap.put("age", rs.getInt("age"));
             taskList.add(resultMap);
         }
