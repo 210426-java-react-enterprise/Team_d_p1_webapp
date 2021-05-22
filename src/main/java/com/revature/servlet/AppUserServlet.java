@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +78,8 @@ public class AppUserServlet extends HttpServlet {
         } catch (EmailTakenException e) {
             resp.setStatus(400);
             resp.getWriter().println("Email already taken!!!");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
         // 3.) Persist to database
@@ -105,7 +108,7 @@ public class AppUserServlet extends HttpServlet {
         AppUser user = null;
         try {
             user = service.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException | SQLException e) {
             e.printStackTrace();
         }
 
