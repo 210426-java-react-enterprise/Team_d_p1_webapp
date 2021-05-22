@@ -1,12 +1,18 @@
 package com.revature.services;
 
 import com.revature.entities.Task;
+import com.revature.util.ResultSetService;
 
 import java.time.LocalDateTime;
 
 public class TaskListService {
 
     private Task newTask;
+    private ResultSetService resultSetService;
+
+    public TaskListService(ResultSetService resultSetService) {
+        this.resultSetService = resultSetService;
+    }
 
     //    TODO create database call to ORM to persist task
     public void addTask(Task newTask) {

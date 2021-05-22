@@ -3,6 +3,7 @@ package com.revature.servlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.Task;
 import com.revature.services.TaskListService;
+import com.revature.util.AppState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 public class TaskListServlet extends HttpServlet {
 
-    private TaskListService taskListService = new TaskListService();
+    private final TaskListService taskListService = AppState.getTaskListService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
