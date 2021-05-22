@@ -19,7 +19,7 @@ public class AppUserService {
             "@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" +
             "\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]" +
             "|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])");
-    private ResultSetService resultSetService;
+    private final ResultSetService resultSetService;
 
     public AppUserService(ResultSetService resultSetService) {
         this.resultSetService = resultSetService;
@@ -50,24 +50,22 @@ public class AppUserService {
 
     public AppUser registerUser(AppUser userToBeRegistered) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException, UsernameTakenException, EmailTakenException, SQLException {
         if(!isValidUsername(userToBeRegistered.getUsername())){
-            throw new InvalidUsernameException();
+            throw new InvalidUsernameException("Please Enter Valid Username");
         }
         if(!isValidPassword(userToBeRegistered.getPassword())){
-            throw new InvalidPasswordException();
+            throw new InvalidPasswordException("Please enter valid password");
         }
         if(!isValidEmail(userToBeRegistered.getEmail())){
-            throw new InvalidEmailException();
+            throw new InvalidEmailException("Please Enter valid email");
         }
         if(!isUsernameAvailable(userToBeRegistered.getUsername())){
-            throw new UsernameTakenException();
+            throw new UsernameTakenException("Username is taken");
         }
         if(!isEmailAvailable(userToBeRegistered.getEmail())){
-            throw new EmailTakenException();
+            throw new EmailTakenException("Email is taken");
         }
 
-        AppUser registeredUser = resultSetService.resultSetToUser(StatementType.INSERT.createStatement(userToBeRegistered));
-
-        return registeredUser;
+        return resultSetService.resultSetToUser(StatementType.INSERT.createStatement(userToBeRegistered));
     }
 
 
@@ -79,38 +77,31 @@ public class AppUserService {
 
         AppUser loggedInUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username", "password"));
         if(loggedInUser == null) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("Username not found, please check credentials and try again");
         }
 
         return loggedInUser;
 
     }
 
-    public boolean isUsernameAvailable(String username) throws UsernameTakenException, SQLException {
+    public boolean isUsernameAvailable(String username) throws SQLException {
 
         AppUser user = new AppUser();
         user.setUsername(username);
 
         AppUser validatedUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
 
-        if(validatedUser == null) {
-            return false;
-        }
-
-        return true;
+        return validatedUser != null;
     }
 
-    public boolean isEmailAvailable(String email) throws EmailTakenException, SQLException {
+    public boolean isEmailAvailable(String email) throws SQLException {
+
         AppUser user = new AppUser();
         user.setEmail(email);
 
         AppUser validatedUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "email"));
 
-        if(validatedUser == null) {
-            return false;
-        }
-
-        return true;
+        return validatedUser != null;
     }
 
 }
