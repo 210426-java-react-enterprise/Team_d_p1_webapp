@@ -13,15 +13,15 @@ import java.util.Vector;
 @Table(name="users")
 public class AppUser {
 // TODO add @Column tag here for database fields
-    @Column(columnName = "username")
+    @Column(columnName = "username", unique = true, notNull = true)
     private String username;
-    @Column(columnName = "password")
+    @Column(columnName = "password", notNull = true)
     private String password;
-    @Column(columnName = "first_name")
+    @Column(columnName = "first_name", notNull = true)
     private String firstName;
-    @Column(columnName = "last_name")
+    @Column(columnName = "last_name", notNull = true)
     private String lastName;
-    @Column(columnName = "email")
+    @Column(columnName = "email", notNull = true, unique = true)
     private String email;
     @Column(columnName = "age")
     private int age;

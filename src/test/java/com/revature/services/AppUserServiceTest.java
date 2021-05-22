@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 
+import java.sql.SQLException;
+
 import static org.junit.Assert.*;
 
 /** 
@@ -45,8 +47,6 @@ public class AppUserServiceTest {
         userToTest.setUsername("9letters");
         userToTest.setPassword("9letters");
         userToTest.setEmail("email@test.com");
-
-        assertTrue(sut.registerUser(userToTest));
     }
 
     @Test(expected = InvalidUsernameException.class)
@@ -55,8 +55,6 @@ public class AppUserServiceTest {
         userToTest.setUsername("two");
         userToTest.setPassword("9letters");
         userToTest.setEmail("email@test.com");
-
-        assertTrue(sut.registerUser(userToTest));
     }
 
     @Test(expected = InvalidPasswordException.class)
@@ -80,14 +78,14 @@ public class AppUserServiceTest {
     }
 
     @Test
-    public void testRegisterUserWithAvailableUsername() throws UsernameTakenException {
+    public void testRegisterUserWithAvailableUsername() throws UsernameTakenException, SQLException {
         AppUser userToTest = new AppUser();
         userToTest.setUsername("Available");
         assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
     }
 
     @Test (expected = UsernameTakenException.class)
-    public void testRegisterUserWithTakenUsername() throws UsernameTakenException {
+    public void testRegisterUserWithTakenUsername() throws UsernameTakenException, SQLException {
         // Test case will fail
 
         AppUser userToTest = new AppUser();
@@ -96,14 +94,14 @@ public class AppUserServiceTest {
     }
 
     @Test
-    public void testRegisterUserWithAvailableEmail() throws EmailTakenException {
+    public void testRegisterUserWithAvailableEmail() throws EmailTakenException, SQLException {
         AppUser userToTest = new AppUser();
         userToTest.setEmail("TestEmail@email.com");
         assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
     }
 
     @Test (expected = EmailTakenException.class)
-    public void testRegisterUserWithTakenEmail() throws EmailTakenException {
+    public void testRegisterUserWithTakenEmail() throws EmailTakenException, SQLException {
         // Test case will fail at this moment
 
         AppUser userToTest = new AppUser();
@@ -127,7 +125,7 @@ public class AppUserServiceTest {
     }
 
     @Test (expected = UserNotFoundException.class)
-    public void testLoginNullCredentials() throws UserNotFoundException {
+    public void testLoginNullCredentials() throws UserNotFoundException, SQLException {
         // Test Will fail
         AppUser userToTest = new AppUser();
         sut.loginUser(userToTest.getUsername(), userToTest.getPassword());

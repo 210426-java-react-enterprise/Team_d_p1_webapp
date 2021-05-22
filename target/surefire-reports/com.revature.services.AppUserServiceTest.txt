@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.revature.services.AppUserServiceTest
 -------------------------------------------------------------------------------
-Tests run: 19, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.206 sec <<< FAILURE!
-testLoginNullCredentials(com.revature.services.AppUserServiceTest)  Time elapsed: 0.012 sec  <<< FAILURE!
+Tests run: 19, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.218 sec <<< FAILURE!
+testLoginNullCredentials(com.revature.services.AppUserServiceTest)  Time elapsed: 0.014 sec  <<< FAILURE!
 java.lang.AssertionError: Expected exception: com.revature.exceptions.UserNotFoundException
 	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:34)
 	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
@@ -32,7 +32,7 @@ java.lang.AssertionError: Expected exception: com.revature.exceptions.UserNotFou
 	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:115)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
 
-testRegisterUserWithTakenEmail(com.revature.services.AppUserServiceTest)  Time elapsed: 0.003 sec  <<< FAILURE!
+testRegisterUserWithTakenEmail(com.revature.services.AppUserServiceTest)  Time elapsed: 0.002 sec  <<< FAILURE!
 java.lang.AssertionError: Expected exception: com.revature.exceptions.EmailTakenException
 	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:34)
 	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)

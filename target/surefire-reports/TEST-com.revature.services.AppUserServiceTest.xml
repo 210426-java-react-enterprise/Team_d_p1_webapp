@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="19" failures="3" name="com.revature.services.AppUserServiceTest" time="0.048" errors="0" skipped="0">
+<testsuite tests="19" failures="3" name="com.revature.services.AppUserServiceTest" time="0.045" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\AdoptOpenJDK\jdk-8.0.292.10-hotspot\jre\bin"/>
@@ -65,10 +65,10 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidPasswordWithNull" time="0.011"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidPasswordWithNull" time="0.014"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidPassword" time="0"/>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterValidUser" time="0.012"/>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testLoginNullCredentials" time="0.012">
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterValidUser" time="0.003"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testLoginNullCredentials" time="0.014">
     <failure message="Expected exception: com.revature.exceptions.UserNotFoundException" type="java.lang.AssertionError">java.lang.AssertionError: Expected exception: com.revature.exceptions.UserNotFoundException
 	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:34)
 	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
@@ -102,10 +102,10 @@
   <testcase classname="com.revature.services.AppUserServiceTest" name="testIsInvalidPassword" time="0"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testIsInvalidEmail" time="0"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidUsernameWithInvalidInfo" time="0"/>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidEmail" time="0.001"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidEmail" time="0"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testLoginUser" time="0.001"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithInvalidName" time="0.001"/>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithTakenEmail" time="0.003">
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithTakenEmail" time="0.002">
     <failure message="Expected exception: com.revature.exceptions.EmailTakenException" type="java.lang.AssertionError">java.lang.AssertionError: Expected exception: com.revature.exceptions.EmailTakenException
 	at org.junit.internal.runners.statements.ExpectException.evaluate(ExpectException.java:34)
 	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
@@ -136,7 +136,7 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
 </failure>
   </testcase>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithInvalidEmail" time="0"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithInvalidEmail" time="0.001"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithInvalidPassword" time="0.001"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidUsernameWithValidInfo" time="0.001"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithTakenUsername" time="0.002">
@@ -170,8 +170,8 @@
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:75)
 </failure>
   </testcase>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithAvailableEmail" time="0.001"/>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithAvailableUsername" time="0.001"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithAvailableEmail" time="0.003"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testRegisterUserWithAvailableUsername" time="0"/>
   <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidUsernameWithNull" time="0.001"/>
-  <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidEmailWithNull" time="0"/>
+  <testcase classname="com.revature.services.AppUserServiceTest" name="testIsValidEmailWithNull" time="0.001"/>
 </testsuite>

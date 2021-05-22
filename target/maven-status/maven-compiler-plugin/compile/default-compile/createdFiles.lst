@@ -1,7 +1,0 @@
-com\revature\annotations\ForeignKey.class
-com\revature\annotations\Table.class
-com\revature\annotations\Constraint.class
-com\revature\annotations\Entity.class
-com\revature\annotations\SerialField.class
-com\revature\annotations\PrimaryKey.class
-com\revature\annotations\Column.class
