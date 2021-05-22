@@ -28,3 +28,9 @@ hs_err_pid*
 
 #maven /target
 /target
+
+# Build folders
+target/
+
+#Properties files
+*.properties
