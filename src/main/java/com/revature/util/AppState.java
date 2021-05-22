@@ -2,6 +2,8 @@ package com.revature.util;
 
 import com.revature.services.AppUserService;
 import com.revature.services.TaskListService;
+import com.revature.util.datasource.ConnectionFactory;
+
 
 public class AppState {
 
@@ -10,6 +12,14 @@ public class AppState {
 
     private AppState() {
 
+    }
+
+    static {
+                ConnectionFactory.setConnection(
+                System.getenv("host_url"),
+                System.getenv("db_username"),
+                System.getenv("db_password")
+        );
     }
 
     public static AppState getInstance() {
