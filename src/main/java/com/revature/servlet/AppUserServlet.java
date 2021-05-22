@@ -9,6 +9,7 @@ import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
 import com.revature.services.AppUserService;
+import com.revature.util.AppState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AppUserServlet extends HttpServlet {
-    private AppUserService service = new AppUserService();
+
+    private final AppUserService appUserService = AppState.getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
@@ -62,7 +64,7 @@ public class AppUserServlet extends HttpServlet {
 
         // 2.) Service execution
         try {
-            service.registerUser(user);
+            appUserService.registerUser(user);
         } catch (InvalidUsernameException e) {
             resp.setStatus(400);
             resp.getWriter().println("Invalid Username Specified!!!");
@@ -107,7 +109,7 @@ public class AppUserServlet extends HttpServlet {
 
         AppUser user = null;
         try {
-            user = service.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
+            user = appUserService.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
         } catch (UserNotFoundException | SQLException e) {
             e.printStackTrace();
         }
