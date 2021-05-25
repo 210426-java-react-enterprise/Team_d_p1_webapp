@@ -13,6 +13,7 @@ import com.revature.services.AppUserService;
 import com.revature.util.AppState;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +23,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AppUserServlet extends HttpServlet {
 
-    private final AppUserService appUserService = AppState.getAppUserService();
+    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
@@ -61,8 +63,8 @@ public class AppUserServlet extends HttpServlet {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-
-        // 2.) Service execution
+//
+//        // 2.) Service execution
         try {
             appUserService.registerUser(user);
         } catch (InvalidUsernameException e) {
@@ -98,12 +100,12 @@ public class AppUserServlet extends HttpServlet {
         // 400 - Client Side Error
         // 500 - Server Side Error
         resp.setStatus(202);
-        resp.getWriter().println("The user has been created " + username);
+        resp.getWriter().println("The user has been created ");
 
     }
 
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        System.out.println("put servlet fired");
         InputStream json = req.getInputStream();
 
         Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
