@@ -73,26 +73,39 @@ public class TaskListServlet extends HttpServlet {
                     String title = jsonMap.get("title").toString();
                     if(taskService.updateTaskTitle(taskId, title)) {
                         writer.println("Title for task #" + taskId + " has been updated");
+                        break;
                     }
+                    writer.println("Something went wrong.");
+                    break;
+
 
                 }
                 case "content": {
                     String message = jsonMap.get("message").toString();
                     if (taskService.updateTaskContent(taskId, message)) {
                         writer.println("Content for task #" + taskId + " has been updated");
-                    };
+                    }
+                    writer.println("Something went wrong.");
+                    break;
                 }
                 case "dueDate": {
                     String dueDate = jsonMap.get("dueDate").toString();
                     if (taskService.updateTaskDueDate(taskId, dueDate)) {
                         writer.println("Due Date for task #" + taskId + " has been updated");
-                    };
+                    }
+                    writer.println("Something went wrong.");
+                    break;
                 }
                 case "state": {
                     if (taskService.updateTaskState(taskId)) {
                         writer.println("The completed state for task #" + taskId + " has been updated");
-                    };
+                    }
+                    writer.println("Something went wrong.");
+                    break;
 
+                }
+                default: {
+                    writer.println("Please enter valid input!");
                 }
             }
 
