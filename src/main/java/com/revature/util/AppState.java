@@ -2,6 +2,7 @@ package com.revature.util;
 
 import com.revature.services.AppUserService;
 import com.revature.services.TaskListService;
+import com.revature.services.TaskService;
 import com.revature.util.datasource.ConnectionFactory;
 
 
@@ -18,7 +19,8 @@ public class AppState {
                 ConnectionFactory.setConnection(
                 System.getenv("host_url"),
                 System.getenv("db_username"),
-                System.getenv("db_password")
+                System.getenv("db_password"),
+                        "schema_name"
         );
     }
 
@@ -39,4 +41,7 @@ public class AppState {
     public static TaskListService getTaskListService(){
         return new TaskListService(resultSetService);
     }
+
+    public static TaskService getTaskService() { return new TaskService(resultSetService); };
+
 }

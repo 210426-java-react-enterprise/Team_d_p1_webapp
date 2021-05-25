@@ -1,19 +1,24 @@
 package com.revature.services;
 
 import com.revature.entities.AppUser;
+import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.EmailTakenException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.exceptions.UsernameTakenException;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
+import com.revature.util.ResultSetService;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 /** 
 * AppUserService Tester. 
@@ -23,16 +28,22 @@ import static org.junit.Assert.*;
 * @version 1.0 
 */ 
 public class AppUserServiceTest {
+
+    @InjectMocks
     AppUserService sut;
+
+    @Mock
+    ResultSetService mockResultSetService;
 
     @Before
     public void before(){
-    sut = new AppUserService();
+    openMocks(this);
 } 
 
     @After
     public void after(){
     sut = null;
+    mockResultSetService = null;
 } 
 
     /**
@@ -78,14 +89,14 @@ public class AppUserServiceTest {
     }
 
     @Test
-    public void testRegisterUserWithAvailableUsername() throws UsernameTakenException, SQLException {
+    public void testRegisterUserWithAvailableUsername() throws UsernameTakenException, SQLException, ImproperConfigurationException {
         AppUser userToTest = new AppUser();
         userToTest.setUsername("Available");
         assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
     }
 
     @Test (expected = UsernameTakenException.class)
-    public void testRegisterUserWithTakenUsername() throws UsernameTakenException, SQLException {
+    public void testRegisterUserWithTakenUsername() throws UsernameTakenException, SQLException, ImproperConfigurationException {
         // Test case will fail
 
         AppUser userToTest = new AppUser();
@@ -94,14 +105,14 @@ public class AppUserServiceTest {
     }
 
     @Test
-    public void testRegisterUserWithAvailableEmail() throws EmailTakenException, SQLException {
+    public void testRegisterUserWithAvailableEmail() throws EmailTakenException, SQLException, ImproperConfigurationException {
         AppUser userToTest = new AppUser();
         userToTest.setEmail("TestEmail@email.com");
         assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
     }
 
     @Test (expected = EmailTakenException.class)
-    public void testRegisterUserWithTakenEmail() throws EmailTakenException, SQLException {
+    public void testRegisterUserWithTakenEmail() throws EmailTakenException, SQLException, ImproperConfigurationException {
         // Test case will fail at this moment
 
         AppUser userToTest = new AppUser();
@@ -125,7 +136,7 @@ public class AppUserServiceTest {
     }
 
     @Test (expected = UserNotFoundException.class)
-    public void testLoginNullCredentials() throws UserNotFoundException, SQLException {
+    public void testLoginNullCredentials() throws UserNotFoundException, SQLException, ImproperConfigurationException {
         // Test Will fail
         AppUser userToTest = new AppUser();
         sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
