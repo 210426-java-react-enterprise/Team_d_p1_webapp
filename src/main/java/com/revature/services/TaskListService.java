@@ -19,11 +19,6 @@ public class TaskListService {
         System.out.println("Hypothetical task has been added: " + newTask.toString());
     }
 
-    // TODO create database call to ORM to update task based on task Id
-    public void updateTask(Task task) {
-        System.out.println("Task Updated");
-    }
-
     //    TODO create db call to remove task from task table by ID
     public void removeTask(int taskId) {
         System.out.println("Task has been deleted");

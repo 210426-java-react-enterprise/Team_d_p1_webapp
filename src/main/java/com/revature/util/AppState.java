@@ -2,6 +2,7 @@ package com.revature.util;
 
 import com.revature.services.AppUserService;
 import com.revature.services.TaskListService;
+import com.revature.services.TaskService;
 import com.revature.util.datasource.ConnectionFactory;
 
 
@@ -39,4 +40,7 @@ public class AppState {
     public static TaskListService getTaskListService(){
         return new TaskListService(resultSetService);
     }
+
+    public static TaskService getTaskService() { return new TaskService(resultSetService); };
+
 }

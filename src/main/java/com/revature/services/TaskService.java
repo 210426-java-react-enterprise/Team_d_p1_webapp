@@ -1,22 +1,81 @@
 package com.revature.services;
 
 import com.revature.entities.Task;
+import com.revature.statements.StatementType;
+import com.revature.util.ResultSetService;
 
 public class TaskService {
 
-    public Task updateTaskContent(Task task, String newContent){
+    private Task task;
+    private Task resultTask;
+    private final ResultSetService resultSetService;
+
+    public TaskService(ResultSetService resultSetService) {
+        this.resultSetService = resultSetService;
+    }
+
+    public boolean updateTaskContent(int taskId, String newContent){
+        task = new Task();
         task.setTaskMessage(newContent);
-        return task;
+        task.setTaskId(taskId);
+
+        try {
+            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "message"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resultTask != null) {
+            return true;
+        }
+        return false;
+
     }
 
-    public Task updateTaskTitle(Task task, String newTitle){
+    public boolean updateTaskTitle(int taskId, String newTitle){
         task.setTaskTitle(newTitle);
-        return task;
+        task.setTaskId(taskId);
+
+        try {
+            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "title"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resultTask != null) {
+            return true;
+        }
+        return false;
     }
 
-    public Task updateTaskDueDate(Task task, String newDueDate){
+    public boolean updateTaskDueDate(int taskId, String newDueDate){
         task.setDateDue(newDueDate);
-        return task;
+        task.setTaskId(taskId);
+        try {
+            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "dateDue"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resultTask != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateTaskState(int taskId) {
+        task.setTaskState();
+
+        try {
+            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "taskState"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resultTask != null) {
+            return true;
+        }
+        return false;
     }
 
 }

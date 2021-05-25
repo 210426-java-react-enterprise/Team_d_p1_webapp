@@ -44,6 +44,8 @@ public class Task {
         this.taskState = false;
     }
 
+    public Task(){};
+
 
     public String getDateDue() {
         return dateDue;
