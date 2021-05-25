@@ -19,7 +19,8 @@ public class AppState {
                 ConnectionFactory.setConnection(
                 System.getenv("host_url"),
                 System.getenv("db_username"),
-                System.getenv("db_password")
+                System.getenv("db_password"),
+                        "schema_name"
         );
     }
 
