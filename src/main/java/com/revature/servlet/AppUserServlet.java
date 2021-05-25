@@ -2,6 +2,7 @@ package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.AppUser;
+import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.EmailTakenException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.exceptions.UsernameTakenException;
@@ -60,7 +61,6 @@ public class AppUserServlet extends HttpServlet {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        //  TODO Age either change to int ignore or do logic to determine the date
 
         // 2.) Service execution
         try {
@@ -82,6 +82,8 @@ public class AppUserServlet extends HttpServlet {
             resp.getWriter().println("Email already taken!!!");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        } catch (ImproperConfigurationException e) {
+            e.printStackTrace();
         }
 
         // 3.) Persist to database
@@ -110,7 +112,7 @@ public class AppUserServlet extends HttpServlet {
         AppUser user = null;
         try {
             user = appUserService.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
-        } catch (UserNotFoundException | SQLException e) {
+        } catch (UserNotFoundException | SQLException | ImproperConfigurationException e) {
             e.printStackTrace();
         }
 

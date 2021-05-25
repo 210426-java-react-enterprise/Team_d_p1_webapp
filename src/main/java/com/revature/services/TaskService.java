@@ -1,49 +1,22 @@
 package com.revature.services;
 
-import java.time.LocalDateTime;
+import com.revature.entities.Task;
 
 public class TaskService {
 
-//TODO
-    public void updateTaskContent(String newContent){
-
-    }
-//TODO
-    public void addTaskContent(String additionalContent){
-
-    }
-//TODO
-    public void updateTaskDueDate(LocalDateTime newDueDate){
-
-    }
-//TODO
-    public void updateTaskTitle(String newTitle){
-
-    }
-//TODO Reverse the set isPublic flag for a task
-    public void updatePublicView(){
-
+    public Task updateTaskContent(Task task, String newContent){
+        task.setTaskMessage(newContent);
+        return task;
     }
 
-//TODO
-    public void addTaskToTaskList(){
-
+    public Task updateTaskTitle(Task task, String newTitle){
+        task.setTaskTitle(newTitle);
+        return task;
     }
 
-//TODO
-    public void saveTaskToDB(){
-
-    }
-
-//TODO
-    public void getTaskFromDB(){
-
-    }
-
-//TODO
-    public void taskCompleted(){
-
-
+    public Task updateTaskDueDate(Task task, String newDueDate){
+        task.setDateDue(newDueDate);
+        return task;
     }
 
 }
