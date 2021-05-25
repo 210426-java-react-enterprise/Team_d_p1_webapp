@@ -8,13 +8,17 @@ import com.revature.exceptions.UsernameTakenException;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
+import com.revature.util.ResultSetService;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 /** 
 * AppUserService Tester. 
@@ -24,16 +28,22 @@ import static org.junit.Assert.*;
 * @version 1.0 
 */ 
 public class AppUserServiceTest {
+
+    @InjectMocks
     AppUserService sut;
+
+    @Mock
+    ResultSetService mockResultSetService;
 
     @Before
     public void before(){
-    sut = new AppUserService();
+    openMocks(this);
 } 
 
     @After
     public void after(){
     sut = null;
+    mockResultSetService = null;
 } 
 
     /**
