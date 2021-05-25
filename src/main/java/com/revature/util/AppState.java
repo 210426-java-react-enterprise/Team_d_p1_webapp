@@ -20,8 +20,10 @@ public class AppState {
                 System.getenv("host_url"),
                 System.getenv("db_username"),
                 System.getenv("db_password"),
-                "schema_name"
+                "test"
         );
+        @Deprecated
+        ORMState ormState = ORMState.getInstance();
     }
 
     public static AppState getInstance() {

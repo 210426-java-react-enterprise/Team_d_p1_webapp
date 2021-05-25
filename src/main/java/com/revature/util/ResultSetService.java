@@ -17,11 +17,12 @@ public class ResultSetService {
         HashMap<String, Object> resultMap = new HashMap<>();
         LinkedList<HashMap> taskList = new LinkedList<>();
         while(rs.next()) {
-            resultMap.put("taskId", rs.getInt("taskId"));
+            resultMap.put("task_id", rs.getInt("task_id"));
             resultMap.put("title", rs.getString("title"));
             resultMap.put("message", rs.getString("message"));
-            resultMap.put("dueDate", rs.getString("dueDate"));
-            resultMap.put("taskState", rs.getBoolean("taskState"));
+            resultMap.put("due_date", rs.getString("due_date"));
+            resultMap.put("task_state", rs.getBoolean("task_state"));
+            resultMap.put("user_id", rs.getInt("user_id"));
             taskList.add(resultMap);
         }
         return taskList;
@@ -32,8 +33,8 @@ public class ResultSetService {
         while(rs.next()) {
             user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
-            user.setFirstName(rs.getString("firstName"));
-            user.setLastName(rs.getString("lastName"));
+            user.setFirstName(rs.getString("first_name"));
+            user.setLastName(rs.getString("last_name"));
             user.setEmail(rs.getString("email"));
             user.setAge(rs.getInt("age"));
         }
