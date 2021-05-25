@@ -8,12 +8,12 @@
         version="2.5">
 
     <servlet>
-        <servlet-name>appUserServlet</servlet-name>
+        <servlet-name>AppUserServlet</servlet-name>
         <servlet-class>com.revature.servlet.AppUserServlet</servlet-class>
     </servlet>
     
     <servlet-mapping>
-        <servlet-name>appUserServlet</servlet-name>
+        <servlet-name>AppUserServlet</servlet-name>
         <url-pattern>/user</url-pattern>
     </servlet-mapping>
 
