@@ -50,11 +50,12 @@ public class AppUserServlet extends HttpServlet {
         // gather information out of request
         // construct an AppUser
         // send information back to Client
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
-        String firstName = req.getParameter("firstName");
-        String lastName = req.getParameter("lastName");
+        String firstName = req.getParameter("first_name");
+        String lastName = req.getParameter("last_name");
         int age = Integer.parseInt(req.getParameter("age"));
 
         AppUser user = new AppUser();
@@ -63,10 +64,12 @@ public class AppUserServlet extends HttpServlet {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
+        user.setAge(age);
 //
 //        // 2.) Service execution
         try {
             appUserService.registerUser(user);
+            resp.getWriter().println("User added to Database");
         } catch (InvalidUsernameException e) {
             resp.setStatus(400);
             resp.getWriter().println("Invalid Username Specified!!!");
@@ -99,8 +102,6 @@ public class AppUserServlet extends HttpServlet {
         // 300 - Redirect
         // 400 - Client Side Error
         // 500 - Server Side Error
-        resp.setStatus(202);
-        resp.getWriter().println("The user has been created ");
 
     }
 

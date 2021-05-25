@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class TaskListServlet extends HttpServlet {
 
-    private final TaskListService taskListService = AppState.getInstance().getTaskListService();
+    private final TaskListService taskListService = AppState.getTaskListService();
     private final TaskService taskService = AppState.getInstance().getTaskService();
 
     @Override

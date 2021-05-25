@@ -99,4 +99,18 @@ public class AppUser {
     public void setTaskList(List<TaskList> taskList) {
         this.taskList = taskList;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AppUser{");
+        sb.append("username='").append(username).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", age=").append(age);
+        sb.append(", taskList=").append(taskList);
+        sb.append('}');
+        return sb.toString();
+    }
 }
