@@ -18,7 +18,7 @@ public class TaskServiceTest {
 
 @Before
 public void before() throws Exception {
-    sut = new TaskService();
+
 } 
 
 @After

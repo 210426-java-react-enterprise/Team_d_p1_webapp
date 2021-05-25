@@ -1,6 +1,7 @@
 package com.revature.services;
 
 import com.revature.entities.AppUser;
+import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.*;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
@@ -48,7 +49,7 @@ public class AppUserService {
         return(emailPattern.matcher(email).matches());
     }
 
-    public AppUser registerUser(AppUser userToBeRegistered) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException, UsernameTakenException, EmailTakenException, SQLException {
+    public AppUser registerUser(AppUser userToBeRegistered) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException, UsernameTakenException, EmailTakenException, SQLException, ImproperConfigurationException {
         if(!isValidUsername(userToBeRegistered.getUsername())){
             throw new InvalidUsernameException("Please Enter Valid Username");
         }
@@ -64,12 +65,11 @@ public class AppUserService {
         if(!isEmailAvailable(userToBeRegistered.getEmail())){
             throw new EmailTakenException("Email is taken");
         }
-
         return resultSetService.resultSetToUser(StatementType.INSERT.createStatement(userToBeRegistered));
     }
 
 
-    public AppUser loginUser(String username, String password) throws UserNotFoundException, SQLException {
+    public AppUser loginUser(String username, String password) throws UserNotFoundException, SQLException, ImproperConfigurationException {
 
         AppUser user = new AppUser();
         user.setUsername(username);
@@ -84,7 +84,7 @@ public class AppUserService {
 
     }
 
-    public boolean isUsernameAvailable(String username) throws SQLException {
+    public boolean isUsernameAvailable(String username) throws SQLException, ImproperConfigurationException {
 
         AppUser user = new AppUser();
         user.setUsername(username);
@@ -94,7 +94,7 @@ public class AppUserService {
         return validatedUser != null;
     }
 
-    public boolean isEmailAvailable(String email) throws SQLException {
+    public boolean isEmailAvailable(String email) throws SQLException, ImproperConfigurationException {
 
         AppUser user = new AppUser();
         user.setEmail(email);

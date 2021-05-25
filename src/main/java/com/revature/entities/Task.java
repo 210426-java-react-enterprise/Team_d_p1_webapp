@@ -19,8 +19,6 @@ public class Task {
     @PrimaryKey
     private int taskId;
 
-
-
     public Task(String dateDue, String taskTitle, String taskMessage) {
         this.dateDue = dateDue;
         this.taskTitle = taskTitle;
@@ -45,6 +43,8 @@ public class Task {
         this.taskId = taskId;
         this.taskState = false;
     }
+
+    public Task(){};
 
 
     public String getDateDue() {

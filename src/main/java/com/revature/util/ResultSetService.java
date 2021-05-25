@@ -1,6 +1,7 @@
 package com.revature.util;
 
 import com.revature.entities.AppUser;
+import com.revature.entities.Task;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.LinkedList;
 public class ResultSetService {
 
     private ResultSet rs;
+    private Task task;
 
     public LinkedList<HashMap> resultSetToLinkedListTask(ResultSet rs) throws SQLException {
         HashMap<String, Object> resultMap = new HashMap<>();
@@ -36,5 +38,16 @@ public class ResultSetService {
             user.setAge(rs.getInt("age"));
         }
         return user;
+    }
+
+    public Task resultSetForSingleTask(ResultSet rs) throws SQLException {
+        task = new Task();
+        while(rs.next()) {
+            task.setTaskId(rs.getInt("taskId"));
+            task.setTaskTitle(rs.getString("title"));
+            task.setTaskMessage(rs.getString("message"));
+            task.setDateDue(rs.getString("dueDate"));
+        }
+        return task;
     }
 }
