@@ -10,6 +10,7 @@ public class AppState {
 
     private static AppState appState;
     private static ResultSetService resultSetService = new ResultSetService();
+    private static AppUserService appUserService;
 
     private AppState() {
 

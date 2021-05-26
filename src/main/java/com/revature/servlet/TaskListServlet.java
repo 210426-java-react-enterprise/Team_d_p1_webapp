@@ -2,6 +2,7 @@ package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.Task;
+import com.revature.exception.ImproperConfigurationException;
 import com.revature.services.TaskListService;
 import com.revature.services.TaskService;
 import com.revature.util.AppState;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 
@@ -142,12 +144,22 @@ public class TaskListServlet extends HttpServlet {
 
             String username = jsonMap.get("username").toString();
 
-            taskListService.getAllTasksByUsername(username);
+            LinkedList<HashMap> tasks = taskListService.getAllTasksByUsername(username);
 
-            resp.getWriter().println("All tasks for: " + username);
+            String taskJSONString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(tasks);
+
+            System.out.println(taskJSONString);
+
+            resp.getWriter().println(taskJSONString);
+
+        } catch (ImproperConfigurationException e) {
+            resp.setStatus(500);
+            return;
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
 
 }

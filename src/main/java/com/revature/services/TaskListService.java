@@ -5,21 +5,20 @@ import com.revature.entities.Task;
 import com.revature.entities.TaskList;
 import com.revature.exception.ImproperConfigurationException;
 import com.revature.statements.StatementType;
+import com.revature.util.AppState;
 import com.revature.util.ResultSetService;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.stream.Stream;
-
-
 
 public class TaskListService {
     private TaskList taskList;
     private Task newTask;
     private AppUser user;
     private final ResultSetService resultSetService;
+    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
 
     public TaskListService(ResultSetService resultSetService) {
@@ -51,28 +50,16 @@ public class TaskListService {
     }
 
     // TODO create db call that gets all tasks by username
-    public void getAllTasksByUsername(String username) {
-        try {
-            LinkedList<HashMap> list = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(username, "user_id"));
-            taskList = new TaskList();
+    public LinkedList<HashMap> getAllTasksByUsername(String username) throws ImproperConfigurationException, SQLException {
 
-            LinkedList<Task> temp = new LinkedList<>();
-            for (HashMap hm : list) {
-                Task tempTask = new Task();
-                tempTask.setTaskId(Integer.parseInt(hm.get("task_id").toString()));
-                tempTask.setTaskTitle(hm.get("title").toString());
-                tempTask.setTaskMessage(hm.get("message").toString());
-                tempTask.setDateDue(hm.get("due_date").toString());
+        AppUser user = appUserService.findUserByUsername(username);
+        int userId = user.getUserID();
+        Task task = new Task();
+        task.setUserId(userId);
 
-                temp.add(tempTask);
-            }
+        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
 
-            taskList.setTasks(temp);
-            taskList.setUserCreated(username);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        return tasks;
 
     }
 
