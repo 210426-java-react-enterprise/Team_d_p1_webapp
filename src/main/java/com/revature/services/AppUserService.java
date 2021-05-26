@@ -97,4 +97,19 @@ public class AppUserService {
         return validatedUser.getPassword() == null;
     }
 
+    public AppUser findUserByUsername(String username) {
+
+        AppUser user = new AppUser();
+        AppUser resultUser = new AppUser();
+        user.setUsername(username);
+
+        try {
+            resultUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return resultUser;
+
+    }
 }
