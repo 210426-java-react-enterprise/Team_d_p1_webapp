@@ -1,12 +1,18 @@
 package com.revature.services;
 
 import com.revature.entities.Task;
+import com.revature.entities.TaskList;
+import com.revature.statements.StatementType;
 import com.revature.util.ResultSetService;
 
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class TaskListService {
-
+    private TaskList taskList;
     private Task newTask;
     private ResultSetService resultSetService;
 
@@ -14,19 +20,55 @@ public class TaskListService {
         this.resultSetService = resultSetService;
     }
 
+
     //    TODO create database call to ORM to persist task
     public void addTask(Task newTask) {
+        try{
+            resultSetService.resultSetToLinkedListTask(StatementType.INSERT.createStatement(newTask));
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         System.out.println("Hypothetical task has been added: " + newTask.toString());
     }
 
     //    TODO create db call to remove task from task table by ID
     public void removeTask(int taskId) {
-        System.out.println("Task has been deleted");
+        try{
+            resultSetService.resultSetToLinkedListTask(StatementType.DELETE.createStatementWithCondition(taskId, "task_Id"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+        System.out.println("Task has been deleted");
     }
 
     // TODO create db call that gets all tasks by username
     public void getAllTasksByUsername(String username) {
+        try{
+            LinkedList<HashMap> list = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(username,"user_id"));
+            taskList = new TaskList();
+
+
+
+            LinkedList<Task> temp = new LinkedList<>();
+            for (HashMap hm: list) {
+                Task tempTask = new Task();
+                tempTask.setTaskId(Integer.parseInt(hm.get("task_id").toString()));
+                tempTask.setTaskTitle(hm.get("title").toString());
+                tempTask.setTaskMessage(hm.get("message").toString());
+                tempTask.setDateDue(hm.get("due_date").toString());
+                temp.add(tempTask);
+            }
+
+            taskList.setTasks(temp);
+            taskList.setUserCreated(username);
+            // TODO do we need a TaskListID?
+            // taskList.setTaskListID();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 

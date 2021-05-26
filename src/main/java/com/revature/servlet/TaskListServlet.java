@@ -32,7 +32,6 @@ public class TaskListServlet extends HttpServlet {
             String dateDue = req.getParameter("dueDate");
 
             Task newTask = new Task(dateDue, title, message);
-
             taskListService.addTask(newTask);
 
             resp.setStatus(202);

@@ -2,6 +2,10 @@ package com.revature.entities;
 
 import com.revature.annotations.Column;
 import com.revature.annotations.Entity;
+import com.revature.annotations.Table;
+
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
 import com.revature.annotations.PrimaryKey;
 import com.revature.annotations.Table;
 
@@ -23,18 +27,6 @@ public class TaskList {
         this.userCreated = userCreated;
 
     }
-
-    public TaskList(int taskListID, String userCreated) {
-        this.taskListID = taskListID;
-        this.userCreated = userCreated;
-    }
-
-    public TaskList(int taskListID, String userCreated, List<Task> tasks) {
-        this.taskListID = taskListID;
-        this.userCreated = userCreated;
-        this.tasks = tasks;
-    }
-
     public TaskList(){
         tasks = new Vector<>();
     }
