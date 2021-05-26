@@ -17,7 +17,18 @@ public class Task {
     @Column(columnName = "taskState")
     private boolean taskState;
     @PrimaryKey
+    @Column(columnName = "task_id")
     private int taskId;
+    @Column(columnName = "user_id")
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public Task(String dateDue, String taskTitle, String taskMessage) {
         this.dateDue = dateDue;

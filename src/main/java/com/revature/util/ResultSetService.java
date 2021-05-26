@@ -16,13 +16,14 @@ public class ResultSetService {
     public LinkedList<HashMap> resultSetToLinkedListTask(ResultSet rs) throws SQLException {
         HashMap<String, Object> resultMap = new HashMap<>();
         LinkedList<HashMap> taskList = new LinkedList<>();
+
+
         while((rs!=null) && rs.next()) {
-
-
+            resultMap = new HashMap<>();
             resultMap.put("task_id", rs.getInt("task_id"));
             resultMap.put("title", rs.getString("title"));
             resultMap.put("message", rs.getString("message"));
-            resultMap.put("due_date", rs.getString("due_date"));
+            resultMap.put("date_due", rs.getString("date_due"));
             resultMap.put("task_state", rs.getBoolean("task_state"));
             resultMap.put("user_id", rs.getInt("user_id"));
             taskList.add(resultMap);
