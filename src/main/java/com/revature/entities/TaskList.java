@@ -1,25 +1,14 @@
 package com.revature.entities;
 
-import com.revature.annotations.Column;
-import com.revature.annotations.Entity;
-import com.revature.annotations.Table;
-
-import com.revature.annotations.Column;
-import com.revature.annotations.Entity;
-import com.revature.annotations.PrimaryKey;
-import com.revature.annotations.Table;
-
 import java.util.List;
 import java.util.Vector;
-@Table(name="taskList")
-@Entity
+
 public class TaskList {
 
-    @PrimaryKey
     private int taskListID;
-    @Column(columnName = "userCreated")
+
     private String userCreated;
-    @Column(columnName = "tasks")
+
     private List<Task> tasks;
 
     public TaskList(String userCreated) {
