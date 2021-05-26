@@ -68,8 +68,8 @@ public class AppUserServlet extends HttpServlet {
 //
 //        // 2.) Service execution
         try {
-            appUserService.registerUser(user);
-            resp.getWriter().println("User added to Database");
+            AppUser registeredUser = appUserService.registerUser(user);
+            resp.getWriter().println("User added to Database: \n" + registeredUser);
         } catch (InvalidUsernameException e) {
             resp.setStatus(400);
             resp.getWriter().println("Invalid Username Specified!!!");
@@ -85,10 +85,8 @@ public class AppUserServlet extends HttpServlet {
         } catch (EmailTakenException e) {
             resp.setStatus(400);
             resp.getWriter().println("Email already taken!!!");
-        } catch (SQLException throwables) {
+        } catch (SQLException | ImproperConfigurationException throwables) {
             throwables.printStackTrace();
-        } catch (ImproperConfigurationException e) {
-            e.printStackTrace();
         }
 
         // 3.) Persist to database
@@ -122,7 +120,7 @@ public class AppUserServlet extends HttpServlet {
         if(user.getPassword() == null) {
             resp.getWriter().println("Please check your credentials");
         } else {
-            resp.getWriter().println("Succesfully Logged In");
+            resp.getWriter().println("Succesfully Logged In: \n" + user);
         }
 
     }

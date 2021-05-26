@@ -22,11 +22,6 @@ public class AppUserService {
         this.resultSetService = resultSetService;
     }
 
-//    TODO needs logic to lookup information that we obtain from database, most likely will pair to a session cache that gets created, different task and different branch though
-    private boolean verify(String username,String password){
-        return true;
-    }
-
     public boolean isValidUsername(String username){
         if(username == null || username.length()<7)
             return false;
@@ -47,21 +42,21 @@ public class AppUserService {
 
     public AppUser registerUser(AppUser userToBeRegistered) throws InvalidUsernameException, InvalidEmailException, InvalidPasswordException, UsernameTakenException, EmailTakenException, SQLException, ImproperConfigurationException {
         if(!isValidUsername(userToBeRegistered.getUsername())){
-            throw new InvalidUsernameException("Please Enter Valid Username");
+            throw new InvalidUsernameException("\nPlease Enter Valid Username");
         }
         if(!isValidPassword(userToBeRegistered.getPassword())){
-            throw new InvalidPasswordException("Please enter valid password");
+            throw new InvalidPasswordException("\nPlease enter valid password");
         }
         if(!isValidEmail(userToBeRegistered.getEmail())){
-            throw new InvalidEmailException("Please Enter valid email");
+            throw new InvalidEmailException("\nPlease Enter valid email");
         }
         if(!isUsernameAvailable(userToBeRegistered.getUsername())){
-            throw new UsernameTakenException("Username is taken");
+            throw new UsernameTakenException("\nUsername is taken");
         }
         if(!isEmailAvailable(userToBeRegistered.getEmail())){
-            throw new EmailTakenException("Email is taken");
+            throw new EmailTakenException("\nEmail is taken");
         }
-        System.out.println(userToBeRegistered.toString());
+
         return resultSetService.resultSetToUser(StatementType.INSERT.createStatement(userToBeRegistered));
     }
 
