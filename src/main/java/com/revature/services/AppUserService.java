@@ -87,8 +87,9 @@ public class AppUserService {
         user.setUsername(username);
 
         AppUser validatedUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
+        System.out.println("validated user rs:" + validatedUser);
 
-        return validatedUser != null;
+        return validatedUser.getPassword() == null;
     }
 
     public boolean isEmailAvailable(String email) throws SQLException, ImproperConfigurationException {
@@ -98,7 +99,7 @@ public class AppUserService {
 
         AppUser validatedUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "email"));
 
-        return validatedUser != null;
+        return validatedUser.getPassword() == null;
     }
 
 }

@@ -16,7 +16,9 @@ public class ResultSetService {
     public LinkedList<HashMap> resultSetToLinkedListTask(ResultSet rs) throws SQLException {
         HashMap<String, Object> resultMap = new HashMap<>();
         LinkedList<HashMap> taskList = new LinkedList<>();
-        while(rs.next()) {
+        while((rs!=null) && rs.next()) {
+
+
             resultMap.put("task_id", rs.getInt("task_id"));
             resultMap.put("title", rs.getString("title"));
             resultMap.put("message", rs.getString("message"));
@@ -30,20 +32,23 @@ public class ResultSetService {
 
     public AppUser resultSetToUser(ResultSet rs) throws SQLException {
         AppUser user = new AppUser();
-        while(rs.next()) {
-            user.setUsername(rs.getString("username"));
-            user.setPassword(rs.getString("password"));
-            user.setFirstName(rs.getString("first_name"));
-            user.setLastName(rs.getString("last_name"));
-            user.setEmail(rs.getString("email"));
-            user.setAge(rs.getInt("age"));
+        if(rs != null) {
+            while(rs.next()) {
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                user.setEmail(rs.getString("email"));
+                user.setAge(rs.getInt("age"));
+                user.setUserID(rs.getInt("user_id"));
+            }
         }
         return user;
     }
 
     public Task resultSetForSingleTask(ResultSet rs) throws SQLException {
         task = new Task();
-        while(rs.next()) {
+        while((rs!=null) && rs.next()) {
             task.setTaskId(rs.getInt("taskId"));
             task.setTaskTitle(rs.getString("title"));
             task.setTaskMessage(rs.getString("message"));

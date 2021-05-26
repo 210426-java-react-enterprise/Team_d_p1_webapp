@@ -118,8 +118,8 @@ public class AppUserServlet extends HttpServlet {
         } catch (UserNotFoundException | SQLException | ImproperConfigurationException e) {
             e.printStackTrace();
         }
-
-        if(user == null) {
+        System.out.println(user);
+        if(user.getPassword() == null) {
             resp.getWriter().println("Please check your credentials");
         } else {
             resp.getWriter().println("Succesfully Logged In");
