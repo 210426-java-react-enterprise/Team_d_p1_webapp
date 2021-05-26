@@ -1,11 +1,11 @@
 package com.revature.services;
 
 import com.revature.entities.Task;
-import com.revature.entities.TaskList;
 import com.revature.statements.StatementType;
 import com.revature.util.ResultSetService;
 
 public class TaskService {
+
     private Task task;
     private Task resultTask;
     private final ResultSetService resultSetService;

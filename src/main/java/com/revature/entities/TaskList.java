@@ -27,6 +27,11 @@ public class TaskList {
         this.userCreated = userCreated;
 
     }
+
+    public TaskList(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     public TaskList(){
         tasks = new Vector<>();
     }
