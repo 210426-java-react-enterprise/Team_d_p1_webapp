@@ -1,32 +1,138 @@
 package com.revature.services;
 
+import com.revature.entities.AppUser;
 import com.revature.entities.Task;
+import com.revature.entities.TaskList;
+import com.revature.exception.ImproperConfigurationException;
+import com.revature.statements.StatementType;
 import com.revature.util.ResultSetService;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.stream.Stream;
+
+
 
 public class TaskListService {
-
+    private TaskList taskList;
     private Task newTask;
-    private ResultSetService resultSetService;
+    private AppUser user;
+    private final ResultSetService resultSetService;
+
 
     public TaskListService(ResultSetService resultSetService) {
         this.resultSetService = resultSetService;
     }
 
+
     //    TODO create database call to ORM to persist task
     public void addTask(Task newTask) {
+        try {
+            resultSetService.resultSetToLinkedListTask(StatementType.INSERT.createStatementWithCondition(newTask, "message"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         System.out.println("Hypothetical task has been added: " + newTask.toString());
     }
 
     //    TODO create db call to remove task from task table by ID
     public void removeTask(int taskId) {
-        System.out.println("Task has been deleted");
+        try {
+            resultSetService.resultSetToLinkedListTask(StatementType.DELETE.createStatementWithCondition(taskId, "task_Id"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        System.out.println("Task has been deleted");
     }
 
     // TODO create db call that gets all tasks by username
     public void getAllTasksByUsername(String username) {
+        try {
+            LinkedList<HashMap> list = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(username, "user_id"));
+            taskList = new TaskList();
+
+            LinkedList<Task> temp = new LinkedList<>();
+            for (HashMap hm : list) {
+                Task tempTask = new Task();
+                tempTask.setTaskId(Integer.parseInt(hm.get("task_id").toString()));
+                tempTask.setTaskTitle(hm.get("title").toString());
+                tempTask.setTaskMessage(hm.get("message").toString());
+                tempTask.setDateDue(hm.get("due_date").toString());
+
+                temp.add(tempTask);
+            }
+
+            taskList.setTasks(temp);
+            taskList.setUserCreated(username);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    //    TODO
+    public void createTaskList() {
+    }
+
+
+    //    TODO
+    public void setTaskListComplete() {
+
+        try {
+            resultSetService.resultSetToLinkedListTask(StatementType.UPDATE.createStatementWithCondition(newTask, "taskState"));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ImproperConfigurationException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    //    TODO
+    public boolean updateTaskListToDB() {
+        boolean isTaskUpdated = false;
+
+        try {
+            LinkedList<HashMap> resultTaskList = resultSetService.resultSetToLinkedListTask(StatementType.UPDATE.createStatementWithCondition(newTask, "task_List"));
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ImproperConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    //    TODO
+    public void getTaskListFromDB() {
+
+        try {
+
+            LinkedList<HashMap> allList = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(taskList, "task_List"));
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ImproperConfigurationException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    //Is this needed?
+    public void getTaskListsByUser() {
+
 
     }
 
@@ -45,6 +151,9 @@ public class TaskListService {
 
     }
 
+
+
+
     //    TODO
     public void getTasksCompletedOnTime() {
 
@@ -52,6 +161,11 @@ public class TaskListService {
 
     //    TODO
     public void getTasksNotCompletedInTime() {
+        Task task;
+//            Stream<Task> nonCompletedTasks = taskList.getTasks().stream();
+//                        .filter(task -> !task.getTaskState())
+//                        .count();
+
 
     }
 
@@ -60,28 +174,4 @@ public class TaskListService {
 
     }
 
-    //    TODO
-    public void createTaskList() {
-
-    }
-
-    //    TODO
-    public void setTaskListComplete() {
-
-    }
-
-    //    TODO
-    public void updateTaskListToDB() {
-
-    }
-
-    //    TODO
-    public void getTaskListFromDB() {
-
-    }
-
-    //    TODO
-    public void getTaskListsByUser() {
-
-    }
 }

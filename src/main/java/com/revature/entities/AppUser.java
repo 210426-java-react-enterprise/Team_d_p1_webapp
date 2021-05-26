@@ -29,6 +29,8 @@ public class AppUser {
     @PrimaryKey
     private int userID;
 
+
+
     private List<TaskList> taskList;
 
     public AppUser(){

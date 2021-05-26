@@ -103,7 +103,7 @@ public class AppUserServlet extends HttpServlet {
 
     }
 
-    // Login put
+
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("put servlet fired");
         InputStream json = req.getInputStream();
@@ -121,8 +121,13 @@ public class AppUserServlet extends HttpServlet {
         if(user.getUserID() == 0) {
             resp.getWriter().println("Please check your credentials");
         } else {
+
             resp.getWriter().println("Succesfully Logged In: \n" + user.getUsername());
+
+
         }
+
+
 
     }
 }
