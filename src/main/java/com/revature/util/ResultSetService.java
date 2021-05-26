@@ -53,6 +53,7 @@ public class ResultSetService {
             task.setTaskTitle(rs.getString("title"));
             task.setTaskMessage(rs.getString("message"));
             task.setDateDue(rs.getString("dueDate"));
+
         }
         return task;
     }

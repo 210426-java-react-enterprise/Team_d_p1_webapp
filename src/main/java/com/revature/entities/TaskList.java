@@ -1,12 +1,25 @@
 package com.revature.entities;
 
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
+import com.revature.annotations.Table;
+
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
+import com.revature.annotations.PrimaryKey;
+import com.revature.annotations.Table;
+
 import java.util.List;
 import java.util.Vector;
-// TODO @Entity and @Table tags here
+@Table(name="taskList")
+@Entity
 public class TaskList {
-// TODO @Column Tags here
+
+    @PrimaryKey
     private int taskListID;
+    @Column(columnName = "userCreated")
     private String userCreated;
+    @Column(columnName = "tasks")
     private List<Task> tasks;
 
     public TaskList(String userCreated) {
@@ -14,6 +27,11 @@ public class TaskList {
         this.userCreated = userCreated;
 
     }
+
+    public TaskList(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
     public TaskList(){
         tasks = new Vector<>();
     }
