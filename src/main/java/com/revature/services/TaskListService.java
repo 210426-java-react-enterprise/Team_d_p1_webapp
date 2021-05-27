@@ -16,6 +16,7 @@ import java.util.LinkedList;
 public class TaskListService {
     private TaskList taskList;
     private Task newTask;
+    private Task task;
     private AppUser user;
     private final ResultSetService resultSetService;
     private final AppUserService appUserService = AppState.getInstance().getAppUserService();
@@ -32,7 +33,7 @@ public class TaskListService {
 
            Task returnsTask =  resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatement(newTask));
 
-           System.out.println(returnsTask);
+            System.out.println(returnsTask);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,7 +45,11 @@ public class TaskListService {
     //    TODO create db call to remove task from task table by ID
     public void removeTask(int taskId) {
         try {
-            resultSetService.resultSetToLinkedListTask(StatementType.DELETE.createStatementWithCondition(taskId, "task_Id"));
+            task.setTaskId(taskId);
+
+            Task removeTask = resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_Id"));
+
+            System.out.println(removeTask);
         } catch (Exception e) {
             e.printStackTrace();
         }
