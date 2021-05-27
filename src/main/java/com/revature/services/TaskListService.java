@@ -31,7 +31,7 @@ public class TaskListService {
     public void addTask(Task newTask) {
         try {
 
-           Task returnsTask =  resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatement(newTask));
+           Task returnsTask =  resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
 
             System.out.println(returnsTask);
 
