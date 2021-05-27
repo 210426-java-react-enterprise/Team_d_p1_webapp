@@ -8,6 +8,8 @@
     <artifactId>TaskForce</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+
+
     <!-- Source Java Compiler-->
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

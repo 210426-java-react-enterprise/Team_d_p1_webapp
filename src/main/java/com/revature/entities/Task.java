@@ -22,20 +22,6 @@ public class Task {
     @Column(columnName = "user_id")
     private int userId;
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public Task(String dateDue, String taskTitle, String taskMessage) {
-        this.dateDue = dateDue;
-        this.taskTitle = taskTitle;
-        this.taskMessage = taskMessage;
-        this.taskState = false;
-    }
 
     // Constructor for getting task from database or from front end to be updated in db
     public Task(String dateDue, String taskTitle, String taskMessage, boolean taskState, int taskId) {
@@ -55,8 +41,24 @@ public class Task {
         this.taskState = false;
     }
 
+
+    public Task(String taskTitle, String taskMessage, String dateDue){
+        this.taskTitle = taskTitle;
+        this.taskMessage = taskMessage;
+        this.dateDue = dateDue;
+
+    }
+
+
     public Task(){};
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 
     public String getDateDue() {
         return dateDue;

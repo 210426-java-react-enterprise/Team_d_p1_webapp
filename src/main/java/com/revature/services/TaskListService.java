@@ -29,7 +29,10 @@ public class TaskListService {
     //    TODO create database call to ORM to persist task
     public void addTask(Task newTask) {
         try {
-            resultSetService.resultSetToLinkedListTask(StatementType.INSERT.createStatementWithCondition(newTask, "message"));
+
+           Task returnsTask =  resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatement(newTask));
+
+           System.out.println(returnsTask);
 
         } catch (Exception e) {
             e.printStackTrace();

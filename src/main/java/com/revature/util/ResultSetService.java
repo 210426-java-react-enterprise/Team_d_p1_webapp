@@ -24,7 +24,7 @@ public class ResultSetService {
             resultMap.put("title", rs.getString("title"));
             resultMap.put("message", rs.getString("message"));
             resultMap.put("date_due", rs.getString("date_due"));
-            resultMap.put("task_state", rs.getBoolean("task_state"));
+            resultMap.put("complete", rs.getBoolean("complete"));
             resultMap.put("user_id", rs.getInt("user_id"));
             taskList.add(resultMap);
         }
