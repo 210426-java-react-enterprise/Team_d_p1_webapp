@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -108,6 +109,9 @@ public class AppUserServlet extends HttpServlet {
         System.out.println("put servlet fired");
         InputStream json = req.getInputStream();
 
+        HttpSession session = req.getSession();
+
+
         Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
         System.out.println(jsonMap);
 
@@ -123,11 +127,19 @@ public class AppUserServlet extends HttpServlet {
         } else {
 
             resp.getWriter().println("Succesfully Logged In: \n" + user.getUsername());
-
-
+            session.setAttribute("this-user",user);
         }
 
+    }
 
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        HttpSession session = req.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+
+        }
     }
 }

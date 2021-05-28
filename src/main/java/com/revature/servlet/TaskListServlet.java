@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -140,13 +141,24 @@ public class TaskListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            InputStream json = req.getInputStream();
+            LinkedList<HashMap> tasks;
+            HttpSession session = req.getSession(false);
+            AppUser requestingUser = (session == null) ? null : (AppUser) session.getAttribute("this-user");
+            if (requestingUser == null) {
+                resp.setStatus(401);
+                return;
+            } else if (requestingUser.getUsername().equals("admin")) {
+                tasks = taskListService.getAllUncompletedTasks();
+                session.setAttribute("uncompleted_tasks",tasks);
+                return;
+            }else{
+                InputStream json = req.getInputStream();
 
-            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+                Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
-            String username = jsonMap.get("username").toString();
-
-            LinkedList<HashMap> tasks = taskListService.getAllTasksByUsername(username);
+                String username = jsonMap.get("username").toString();
+                tasks = taskListService.getAllTasksByUsername(username);
+            }
 
             String taskJSONString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(tasks);
 
@@ -156,7 +168,6 @@ public class TaskListServlet extends HttpServlet {
 
         } catch (ImproperConfigurationException e) {
             resp.setStatus(500);
-            return;
         } catch (Exception e) {
             e.printStackTrace();
         }
