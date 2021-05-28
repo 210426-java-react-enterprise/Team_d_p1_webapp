@@ -1,7 +1,11 @@
 package com.revature.entities;
 
-import com.revature.annotations.*;
+import com.revature.annotations.Column;
+import com.revature.annotations.Entity;
+import com.revature.annotations.PrimaryKey;
+import com.revature.annotations.Table;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -9,41 +13,29 @@ import java.util.Vector;
 @Entity
 @Table(name="users")
 public class AppUser {
-
-    @Column(columnName = "username", unique = true, notNull = true, DataType = "VARCHAR")
+// TODO add @Column tag here for database fields
+    @Column(columnName = "username", unique = true, notNull = true)
     private String username;
-    @Column(columnName = "password", notNull = true, unique = false, DataType = "VARCHAR")
+    @Column(columnName = "password", notNull = true)
     private String password;
-    @Column(columnName = "first_name", notNull = true, unique = false, DataType = "VARCHAR")
+    @Column(columnName = "first_name", notNull = true)
     private String firstName;
-    @Column(columnName = "last_name", notNull = true, unique= false, DataType = "VARCHAR")
+    @Column(columnName = "last_name", notNull = true)
     private String lastName;
-    @Column(columnName = "email", notNull = true, unique = true, DataType = "VARCHAR")
+    @Column(columnName = "email", notNull = true, unique = true)
     private String email;
-    @Column(columnName = "age", notNull = true, unique = false, DataType = "INTEGER")
+    @Column(columnName = "age")
     private int age;
-
     @PrimaryKey
-    @Column(columnName = "userID", notNull = true, DataType = "INTEGER", serialID = true)
     private int userID;
+
+
 
     private List<TaskList> taskList;
 
     public AppUser(){
-    super();
+        username = "";
     }
-
-    /**
-     * Constructor for initializing username, password, email, firstname, and lastname
-     * @param username the username of the user
-     * @param password the password of the user
-     * @param email the email of the user
-     * @param firstName the firstname of the user
-     * @param lastName the lastname of the user
-     * @param age the age of the user
-     *
-     */
-
 
     public AppUser(String username, String password, String firstName, String lastName, String email, int age) {
         this.username = username;
@@ -109,5 +101,27 @@ public class AppUser {
 
     public void setTaskList(List<TaskList> taskList) {
         this.taskList = taskList;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AppUser{");
+        sb.append("username='").append(username).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", age=").append(age);
+        sb.append(", taskList=").append(taskList);
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -1,10 +1,14 @@
 package com.revature.services;
 
-import org.junit.Test; 
+import com.revature.util.ResultSetService;
+import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import static org.junit.Assert.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 /** 
 * TaskListService Tester. 
@@ -14,16 +18,21 @@ import static org.junit.Assert.*;
 * @version 1.0 
 */ 
 public class TaskListServiceTest {
+    @InjectMocks
     TaskListService sut;
+
+    @Mock
+    ResultSetService mockResultSetService;
 
 @Before
 public void before() throws Exception {
-    sut = new TaskListService();
+    openMocks(this);
 } 
 
 @After
 public void after() throws Exception {
     sut = null;
+    mockResultSetService = null;
 } 
 
 /** 

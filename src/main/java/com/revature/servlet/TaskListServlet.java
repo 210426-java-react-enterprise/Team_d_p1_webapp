@@ -1,8 +1,13 @@
 package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.entities.AppUser;
 import com.revature.entities.Task;
+import com.revature.exception.ImproperConfigurationException;
+import com.revature.services.AppUserService;
 import com.revature.services.TaskListService;
+import com.revature.services.TaskService;
+import com.revature.util.AppState;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,81 +15,153 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 
 public class TaskListServlet extends HttpServlet {
 
-    private TaskListService taskListService = new TaskListService();
+    private final TaskListService taskListService = AppState.getTaskListService();
+    private final TaskService taskService = AppState.getInstance().getTaskService();
+    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
         // Task state now boolean will only be adjusted from true/false on backend.  Set to true upon creation - everett
-        String title = req.getParameter("title");
-        String message = req.getParameter("message");
-        String dateDue = req.getParameter("dueDate");
 
-        Task newTask = new Task(dateDue, title, message);
+        try {
+            String title = req.getParameter("title");
+            String message = req.getParameter("message");
+            String dateDue = req.getParameter("dueDate");
+            String username = req.getParameter("username");
+            AppUser user = appUserService.findUserByUsername(username);
 
-        taskListService.addTask(newTask);
+            Task newTask = new Task(dateDue, title, message, user.getUserID());
 
-        // TODO persist to database
+            taskListService.addTask(newTask);
 
-        resp.setStatus(202);
 
-        resp.getWriter().print("Task has been created");
+
+            resp.setStatus(202);
+
+            resp.getWriter().print("Task has been created");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        InputStream json = req.getInputStream();
+        PrintWriter writer = resp.getWriter();
 
-        Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+        try {
+            InputStream json = req.getInputStream();
+            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
-        String taskIdString = jsonMap.get("taskId").toString();
-        String title = jsonMap.get("title").toString();
-        String message = jsonMap.get("message").toString();
-        String dueDate = jsonMap.get("dueDate").toString();
+            // Get task ID for task service
+            String taskIdString = jsonMap.get("taskId").toString();
+            int taskId = Integer.parseInt(taskIdString);
 
-        int taskId = Integer.parseInt(taskIdString);
+            /*
+                Get Update Option for task update:
+                - title
+                - content
+                - dueDate
+                - state
+             */
 
-        Task task = new Task(dueDate, title, message, taskId);
+            String updateOption = jsonMap.get("option").toString();
 
-        taskListService.updateTask(task);
+            switch (updateOption) {
+                case "title": {
+                    String title = jsonMap.get("title").toString();
+                    taskService.updateTaskTitle(taskId, title);
+                        writer.println("Title for task #" + taskId + " has been updated");
+                        break;
+
+//                    writer.println("Something went wrong.");
+//                    break;
 
 
-        resp.getWriter().println("Task has been updated: \n" + task.toString());
+                }
+                case "content": {
+                    String message = jsonMap.get("message").toString();
+                    taskService.updateTaskContent(taskId, message);
+                    writer.println("Content for task #" + taskId + " has been updated");
+                    break;
+                }
+                case "date_due": {
+                    String dueDate = jsonMap.get("date_due").toString();
+                    taskService.updateTaskDueDate(taskId, dueDate);
+                    writer.println("Due Date for task #" + taskId + " has been updated");
+                    break;
+                }
+                case "state": {
+                    taskService.updateTaskState(taskId);
+                    writer.println("The completed state for task #" + taskId + " has been updated");
+                    break;
+
+                }
+                default: {
+                    writer.println("Please enter valid input!");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        InputStream json = req.getInputStream();
+        try {
+            InputStream json = req.getInputStream();
 
-        Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
-        String taskIdString = jsonMap.get("taskId").toString();
-        int taskId = Integer.parseInt(taskIdString);
+            String taskIdString = jsonMap.get("taskId").toString();
+            int taskId = Integer.parseInt(taskIdString);
 
-        taskListService.removeTask(taskId);
+            taskListService.removeTask(taskId);
 
-        resp.getWriter().println("Task has been deleted");
+            resp.getWriter().println("Task has been deleted");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        InputStream json = req.getInputStream();
+        try {
+            InputStream json = req.getInputStream();
 
-        Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
-        String username = jsonMap.get("username").toString();
+            String username = jsonMap.get("username").toString();
 
-        taskListService.getAllTasksByUsername(username);
+            LinkedList<HashMap> tasks = taskListService.getAllTasksByUsername(username);
 
-        resp.getWriter().println("All tasks for: " + username);
+            String taskJSONString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(tasks);
+
+            System.out.println(taskJSONString);
+
+            resp.getWriter().println(taskJSONString);
+
+        } catch (ImproperConfigurationException e) {
+            resp.setStatus(500);
+            return;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
+
 }

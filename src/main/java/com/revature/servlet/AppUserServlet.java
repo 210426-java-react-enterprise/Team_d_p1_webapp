@@ -2,6 +2,7 @@ package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.AppUser;
+import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.EmailTakenException;
 import com.revature.exceptions.UserNotFoundException;
 import com.revature.exceptions.UsernameTakenException;
@@ -9,18 +10,23 @@ import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
 import com.revature.services.AppUserService;
+import com.revature.util.AppState;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AppUserServlet extends HttpServlet {
-    private AppUserService service = new AppUserService();
+
+    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
@@ -44,11 +50,12 @@ public class AppUserServlet extends HttpServlet {
         // gather information out of request
         // construct an AppUser
         // send information back to Client
+
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
-        String firstName = req.getParameter("firstName");
-        String lastName = req.getParameter("lastName");
+        String firstName = req.getParameter("first_name");
+        String lastName = req.getParameter("last_name");
         int age = Integer.parseInt(req.getParameter("age"));
 
         AppUser user = new AppUser();
@@ -57,11 +64,12 @@ public class AppUserServlet extends HttpServlet {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        //  TODO Age either change to int ignore or do logic to determine the date
-
-        // 2.) Service execution
+        user.setAge(age);
+//
+//        // 2.) Service execution
         try {
-            service.registerUser(user);
+            AppUser registeredUser = appUserService.registerUser(user);
+            resp.getWriter().println("User added to Database: \n" + registeredUser);
         } catch (InvalidUsernameException e) {
             resp.setStatus(400);
             resp.getWriter().println("Invalid Username Specified!!!");
@@ -77,6 +85,8 @@ public class AppUserServlet extends HttpServlet {
         } catch (EmailTakenException e) {
             resp.setStatus(400);
             resp.getWriter().println("Email already taken!!!");
+        } catch (SQLException | ImproperConfigurationException throwables) {
+            throwables.printStackTrace();
         }
 
         // 3.) Persist to database
@@ -90,13 +100,12 @@ public class AppUserServlet extends HttpServlet {
         // 300 - Redirect
         // 400 - Client Side Error
         // 500 - Server Side Error
-        resp.setStatus(202);
-        resp.getWriter().println("The user has been created " + username);
 
     }
 
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("put servlet fired");
         InputStream json = req.getInputStream();
 
         Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
@@ -104,16 +113,21 @@ public class AppUserServlet extends HttpServlet {
 
         AppUser user = null;
         try {
-            user = service.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
-        } catch (UserNotFoundException e) {
+            user = appUserService.loginUser(jsonMap.get("username").toString(), jsonMap.get("password").toString());
+        } catch (UserNotFoundException | SQLException | ImproperConfigurationException e) {
             e.printStackTrace();
         }
-
-        if(user == null) {
+        System.out.println(user);
+        if(user.getUserID() == 0) {
             resp.getWriter().println("Please check your credentials");
         } else {
-            resp.getWriter().println("Succesfully Logged In");
+
+            resp.getWriter().println("Succesfully Logged In: \n" + user.getUsername());
+
+
         }
+
+
 
     }
 }

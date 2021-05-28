@@ -27,10 +27,4 @@ hs_err_pid*
 *.iml
 
 #maven /target
-/target
-
-# Build folders
 target/
-
-#Properties files
-*.properties

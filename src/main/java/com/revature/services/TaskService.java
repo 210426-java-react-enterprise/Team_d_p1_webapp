@@ -1,49 +1,105 @@
 package com.revature.services;
 
-import java.time.LocalDateTime;
+import com.revature.entities.Task;
+import com.revature.exception.ImproperConfigurationException;
+import com.revature.statements.StatementType;
+import com.revature.util.ResultSetService;
+
+import java.sql.SQLException;
 
 public class TaskService {
 
-//TODO
-    public void updateTaskContent(String newContent){
+    private Task task;
+    private Task resultTask;
+    private final ResultSetService resultSetService;
 
-    }
-//TODO
-    public void addTaskContent(String additionalContent){
-
-    }
-//TODO
-    public void updateTaskDueDate(LocalDateTime newDueDate){
-
-    }
-//TODO
-    public void updateTaskTitle(String newTitle){
-
-    }
-//TODO Reverse the set isPublic flag for a task
-    public void updatePublicView(){
-
+    public TaskService(ResultSetService resultSetService) {
+        this.resultSetService = resultSetService;
     }
 
-//TODO
-    public void addTaskToTaskList(){
+    public boolean updateTaskContent(int taskId, String newContent) throws ImproperConfigurationException, SQLException {
+        task = new Task();
+        resultTask = new Task();
+        task.setTaskMessage(newContent);
+        task.setTaskId(taskId);
 
-    }
+        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
 
-//TODO
-    public void saveTaskToDB(){
+        actualTask.setTaskTitle(newContent);
+        actualTask.setTaskId(taskId);
 
-    }
+        try {
+            StatementType.UPDATE.createStatementWithCondition(actualTask, "task_id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-//TODO
-    public void getTaskFromDB(){
+        if(resultTask != null) {
+            return true;
+        }
+        return false;
 
     }
 
-//TODO
-    public void taskCompleted(){
+    public boolean updateTaskTitle(int taskId, String newTitle) throws ImproperConfigurationException, SQLException {
+        task = new Task();
+        resultTask = new Task();
+        task.setTaskTitle(newTitle);
+        task.setTaskId(taskId);
 
+        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
 
+        actualTask.setTaskTitle(newTitle);
+        actualTask.setTaskId(taskId);
+        System.out.println("actual task" + actualTask);
+
+        try {
+//            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "task_id"));
+            StatementType.UPDATE.createStatementWithCondition(actualTask, "task_id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(resultTask != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateTaskDueDate(int taskId, String newDueDate) throws ImproperConfigurationException, SQLException {
+        task = new Task();
+        task.setDateDue(newDueDate);
+        task.setTaskId(taskId);
+
+        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+
+        actualTask.setDateDue(newDueDate);
+        actualTask.setTaskId(taskId);
+
+        try {
+            StatementType.UPDATE.createStatementWithCondition(actualTask, "task_id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    public boolean updateTaskState(int taskId) throws ImproperConfigurationException {
+       task = new Task();
+       task.setTaskId(taskId);
+
+        try {
+            Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+            System.out.println("before: " + actualTask);
+            actualTask.setTaskState(!actualTask.getTaskState());
+            System.out.println("\n\n\nafter: "+actualTask);
+            StatementType.UPDATE.createStatementWithCondition(actualTask, "task_id");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 
 }
