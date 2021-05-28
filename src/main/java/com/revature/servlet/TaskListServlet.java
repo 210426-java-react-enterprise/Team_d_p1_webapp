@@ -80,12 +80,12 @@ public class TaskListServlet extends HttpServlet {
             switch (updateOption) {
                 case "title": {
                     String title = jsonMap.get("title").toString();
-                    if(taskService.updateTaskTitle(taskId, title)) {
+                    taskService.updateTaskTitle(taskId, title);
                         writer.println("Title for task #" + taskId + " has been updated");
                         break;
-                    }
-                    writer.println("Something went wrong.");
-                    break;
+
+//                    writer.println("Something went wrong.");
+//                    break;
 
 
                 }
