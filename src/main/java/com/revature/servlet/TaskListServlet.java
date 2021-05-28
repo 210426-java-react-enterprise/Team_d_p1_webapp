@@ -33,17 +33,18 @@ public class TaskListServlet extends HttpServlet {
         // Task state now boolean will only be adjusted from true/false on backend.  Set to true upon creation - everett
 
         try {
-            String title = req.getParameter("title");
-            String message = req.getParameter("message");
-            String dateDue = req.getParameter("dueDate");
-            String username = req.getParameter("username");
+            InputStream json = req.getInputStream();
+            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+
+            String title = jsonMap.get("title").toString();
+            String message = jsonMap.get("message").toString();
+            String dateDue = jsonMap.get("dueDate").toString();
+            String username = jsonMap.get("username").toString();
             AppUser user = appUserService.findUserByUsername(username);
 
             Task newTask = new Task(dateDue, title, message, user.getUserID());
 
             taskListService.addTask(newTask);
-
-
 
             resp.setStatus(202);
 
