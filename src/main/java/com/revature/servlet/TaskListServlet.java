@@ -1,8 +1,10 @@
 package com.revature.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.entities.AppUser;
 import com.revature.entities.Task;
 import com.revature.exception.ImproperConfigurationException;
+import com.revature.services.AppUserService;
 import com.revature.services.TaskListService;
 import com.revature.services.TaskService;
 import com.revature.util.AppState;
@@ -23,6 +25,7 @@ public class TaskListServlet extends HttpServlet {
 
     private final TaskListService taskListService = AppState.getTaskListService();
     private final TaskService taskService = AppState.getInstance().getTaskService();
+    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
@@ -32,9 +35,14 @@ public class TaskListServlet extends HttpServlet {
             String title = req.getParameter("title");
             String message = req.getParameter("message");
             String dateDue = req.getParameter("dueDate");
+            String username = req.getParameter("username");
+            AppUser user = appUserService.findUserByUsername(username);
 
-            Task newTask = new Task(dateDue, title, message);
+            Task newTask = new Task(dateDue, title, message, user.getUserID());
+
             taskListService.addTask(newTask);
+
+
 
             resp.setStatus(202);
 

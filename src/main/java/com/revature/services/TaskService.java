@@ -64,7 +64,7 @@ public class TaskService {
     }
 
     public boolean updateTaskState(int taskId) {
-        task.setTaskState();
+        task.getTaskState();
 
         try {
             resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "taskState"));
