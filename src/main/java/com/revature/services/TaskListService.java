@@ -31,7 +31,7 @@ public class TaskListService {
     public void addTask(Task newTask) {
         try {
 
-           Task returnsTask =  resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
+            Task returnsTask = resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
 
             System.out.println(returnsTask);
 
@@ -68,108 +68,6 @@ public class TaskListService {
         LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
 
         return tasks;
-
-    }
-
-
-    //    TODO
-    public void createTaskList() {
-
-
-
-
-    }
-
-
-    //    TODO
-    public void setTaskListComplete() {
-
-        try {
-            resultSetService.resultSetToLinkedListTask(StatementType.UPDATE.createStatementWithCondition(newTask, "taskState"));
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ImproperConfigurationException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    //    TODO
-    public boolean updateTaskListToDB() {
-        boolean isTaskUpdated = false;
-
-        try {
-            LinkedList<HashMap> resultTaskList = resultSetService.resultSetToLinkedListTask(StatementType.UPDATE.createStatement(task));
-
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ImproperConfigurationException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    //    TODO
-    public void getTaskListFromDB() {
-
-        try {
-
-            LinkedList<HashMap> allList = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "task_List"));
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } catch (ImproperConfigurationException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-
-    //Is this needed?
-    public void getTaskListsByUser() {
-
-
-    }
-
-    //    TODO Generates a report of all tasks in a task list.
-    public void generateTaskReport() {
-
-    }
-
-    //    TODO Generates a report of all tasks in a task list that are due by a specific date and time
-    public void generateTaskReportByDate(LocalDateTime byDateTime) {
-
-    }
-
-    //    TODO Reverse the set isPublic flag for a task
-    public void updatePublicView() {
-
-    }
-
-
-
-
-    //    TODO
-    public void getTasksCompletedOnTime() {
-
-    }
-
-    //    TODO
-    public void getTasksNotCompletedInTime() {
-        Task task;
-//            Stream<Task> nonCompletedTasks = taskList.getTasks().stream();
-//                        .filter(task -> !task.getTaskState())
-//                        .count();
-
-
-    }
-
-    //    TODO
-    public void getUncompletedTasks() {
 
     }
 
