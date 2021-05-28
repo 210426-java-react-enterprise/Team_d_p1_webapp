@@ -43,13 +43,14 @@ public class TaskListService {
     }
 
     //    TODO create db call to remove task from task table by ID
-    public void removeTask(int taskId) {
+    public void removeTask(String title) {
+
         try {
-            task.setTaskId(taskId);
+            Task removeTask = new Task();
+            removeTask.setTaskTitle(title);
 
-            Task removeTask = resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
+            StatementType.DELETE.createStatementWithCondition(removeTask, "title");
 
-            System.out.println(removeTask);
         } catch (Exception e) {
             e.printStackTrace();
         }

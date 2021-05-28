@@ -131,10 +131,9 @@ public class TaskListServlet extends HttpServlet {
 
             Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
-            String taskIdString = jsonMap.get("taskId").toString();
-            int taskId = Integer.parseInt(taskIdString);
+            String taskTitleString = jsonMap.get("title").toString();
 
-            taskListService.removeTask(taskId);
+            taskListService.removeTask(taskTitleString);
 
             resp.getWriter().println("Task has been deleted");
         } catch (Exception e) {

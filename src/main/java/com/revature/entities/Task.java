@@ -8,18 +8,19 @@ import com.revature.annotations.Table;
 @Table(name="tasks")
 @Entity
 public class Task {
-    @Column(columnName = "dateDue")
+    @Column(columnName = "date_due")
     private String dateDue;
     @Column(columnName = "title")
     private String taskTitle;
     @Column(columnName = "message")
     private String taskMessage;
-    @Column(columnName = "taskState")
+    @Column(columnName = "task_state")
     private boolean taskState;
     @PrimaryKey
     private int taskId;
     @Column(columnName = "user_id")
     private int userId;
+
 
 
     // Constructor for getting task from database or from front end to be updated in db
