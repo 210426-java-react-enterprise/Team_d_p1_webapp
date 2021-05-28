@@ -42,8 +42,10 @@ public class TaskService {
         task.setTaskId(taskId);
 
         Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
-        System.out.println("actual task" + actualTask);
+
         actualTask.setTaskTitle(newTitle);
+        actualTask.setTaskId(taskId);
+        System.out.println("actual task" + actualTask);
 
         try {
 //            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "task_id"));

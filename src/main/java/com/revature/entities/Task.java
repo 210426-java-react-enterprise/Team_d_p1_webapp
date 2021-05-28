@@ -16,7 +16,7 @@ public class Task {
     private String taskMessage;
     @Column(columnName = "task_state")
     private boolean taskState;
-    @PrimaryKey(name = "tasks")
+    @PrimaryKey(name = "task_id")
     private int task_id;
     @Column(columnName = "user_id")
     private int userId;
@@ -106,6 +106,7 @@ public class Task {
         sb.append(", taskTitle='").append(taskTitle).append('\'');
         sb.append(", taskMessage='").append(taskMessage).append('\'');
         sb.append(", taskState='").append(taskState).append('\'');
+        sb.append(", taskId='").append(task_id).append('\'');
         sb.append('}');
         return sb.toString();
     }

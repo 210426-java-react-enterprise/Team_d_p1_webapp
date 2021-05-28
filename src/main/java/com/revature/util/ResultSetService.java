@@ -49,7 +49,7 @@ public class ResultSetService {
 
     public Task resultSetForSingleTask(ResultSet rs) throws SQLException {
         task = new Task();
-        while(rs.next()) {
+        while(rs != null && rs.next()) {
             task.setTaskId(rs.getInt("task_id"));
             task.setTaskTitle(rs.getString("title"));
             task.setTaskMessage(rs.getString("message"));
