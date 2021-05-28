@@ -64,8 +64,8 @@ public class TaskListServlet extends HttpServlet {
             Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
             // Get task ID for task service
-            String taskIdString = jsonMap.get("taskId").toString();
-            int taskId = Integer.parseInt(taskIdString);
+
+
 
             /*
                 Get Update Option for task update:
@@ -80,8 +80,8 @@ public class TaskListServlet extends HttpServlet {
             switch (updateOption) {
                 case "title": {
                     String title = jsonMap.get("title").toString();
-                    if(taskService.updateTaskTitle(taskId, title)) {
-                        writer.println("Title for task #" + taskId + " has been updated");
+                    if(taskService.updateTaskTitle(title)) {
+                        writer.println("Title for task # has been updated");
                         break;
                     }
                     writer.println("Something went wrong.");
@@ -91,28 +91,29 @@ public class TaskListServlet extends HttpServlet {
                 }
                 case "content": {
                     String message = jsonMap.get("message").toString();
-                    if (taskService.updateTaskContent(taskId, message)) {
-                        writer.println("Content for task #" + taskId + " has been updated");
-                    }
+                    String title = jsonMap.get("title").toString();
+                    taskService.updateTaskContent(title, message);
+                        writer.println("Content for task has been updated");
                     writer.println("Something went wrong.");
                     break;
                 }
                 case "dueDate": {
                     String dueDate = jsonMap.get("dueDate").toString();
-                    if (taskService.updateTaskDueDate(taskId, dueDate)) {
-                        writer.println("Due Date for task #" + taskId + " has been updated");
+                    String title = jsonMap.get("title").toString();
+                    if (taskService.updateTaskDueDate(title, dueDate)) {
+                        writer.println("Due Date for task # has been updated");
                     }
                     writer.println("Something went wrong.");
                     break;
                 }
-                case "state": {
-                    if (taskService.updateTaskState(taskId)) {
-                        writer.println("The completed state for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
-                    break;
+//                case "state": {
+//                    if (taskService.updateTaskState(taskId)) {
+//                        writer.println("The completed state for task #" + taskId + " has been updated");
+//                    }
+//                    writer.println("Something went wrong.");
+//                    break;
 
-                }
+
                 default: {
                     writer.println("Please enter valid input!");
                 }

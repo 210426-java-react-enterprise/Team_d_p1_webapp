@@ -14,13 +14,15 @@ public class TaskService {
         this.resultSetService = resultSetService;
     }
 
-    public boolean updateTaskContent(int taskId, String newContent){
+    public boolean updateTaskContent(String title, String newContent){
         task = new Task();
+        resultTask = new Task();
         task.setTaskMessage(newContent);
-        task.setTaskId(taskId);
+        task.setTaskTitle(title);
 
         try {
             resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "message"));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,9 +34,10 @@ public class TaskService {
 
     }
 
-    public boolean updateTaskTitle(int taskId, String newTitle){
+    public boolean updateTaskTitle(String newTitle){
+        task = new Task();
+        resultTask = new Task();
         task.setTaskTitle(newTitle);
-        task.setTaskId(taskId);
 
         try {
             resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "title"));
@@ -48,11 +51,14 @@ public class TaskService {
         return false;
     }
 
-    public boolean updateTaskDueDate(int taskId, String newDueDate){
+    public boolean updateTaskDueDate(String title, String newDueDate){
+        task = new Task();
+        resultTask = new Task();
+        task.setTaskTitle(title);
         task.setDateDue(newDueDate);
-        task.setTaskId(taskId);
+
         try {
-            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "dateDue"));
+            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "date_due"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,19 +69,19 @@ public class TaskService {
         return false;
     }
 
-    public boolean updateTaskState(int taskId) {
-        task.getTaskState();
+//    public boolean updateTaskState(int taskId) {
+//        task.getTaskState();
+//
+//        try {
+//            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "taskState"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
-        try {
-            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "taskState"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if(resultTask != null) {
-            return true;
-        }
-        return false;
-    }
+//        if(resultTask != null) {
+//            return true;
+//        }
+//        return false;
+//    }
 
 }
