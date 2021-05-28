@@ -1,8 +1,11 @@
 package com.revature.services;
 
 import com.revature.entities.Task;
+import com.revature.exception.ImproperConfigurationException;
 import com.revature.statements.StatementType;
 import com.revature.util.ResultSetService;
+
+import java.sql.SQLException;
 
 public class TaskService {
 
@@ -32,12 +35,19 @@ public class TaskService {
 
     }
 
-    public boolean updateTaskTitle(int taskId, String newTitle){
+    public boolean updateTaskTitle(int taskId, String newTitle) throws ImproperConfigurationException, SQLException {
+        task = new Task();
+        resultTask = new Task();
         task.setTaskTitle(newTitle);
         task.setTaskId(taskId);
 
+        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+        System.out.println("actual task" + actualTask);
+        actualTask.setTaskTitle(newTitle);
+
         try {
-            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "title"));
+//            resultTask = resultSetService.resultSetForSingleTask(StatementType.UPDATE.createStatementWithCondition(task, "task_id"));
+            StatementType.UPDATE.createStatementWithCondition(actualTask, "task_id");
         } catch (Exception e) {
             e.printStackTrace();
         }

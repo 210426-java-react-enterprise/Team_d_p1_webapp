@@ -8,27 +8,28 @@ import com.revature.annotations.Table;
 @Table(name="tasks")
 @Entity
 public class Task {
-    @Column(columnName = "dateDue")
+    @Column(columnName = "date_due")
     private String dateDue;
     @Column(columnName = "title")
     private String taskTitle;
     @Column(columnName = "message")
     private String taskMessage;
-    @Column(columnName = "taskState")
+    @Column(columnName = "task_state")
     private boolean taskState;
-    @PrimaryKey
-    private int taskId;
+    @PrimaryKey(name = "tasks")
+    private int task_id;
     @Column(columnName = "user_id")
     private int userId;
 
 
     // Constructor for getting task from database or from front end to be updated in db
-    public Task(String dateDue, String taskTitle, String taskMessage, boolean taskState, int taskId) {
+    public Task(String dateDue, String taskTitle, String taskMessage, boolean taskState, int taskId, int user_id) {
         this.dateDue = dateDue;
         this.taskTitle = taskTitle;
         this.taskMessage = taskMessage;
-        this.taskId = taskId;
+        this.task_id = taskId;
         this.taskState = taskState;
+        this.userId = user_id;
     }
 
     // Constructor for put to update task
@@ -92,11 +93,11 @@ public class Task {
     }
 
     public int getTaskId() {
-        return taskId;
+        return task_id;
     }
 
     public void setTaskId(int taskId) {
-        this.taskId = taskId;
+        this.task_id = taskId;
     }
     @Override
     public String toString() {
