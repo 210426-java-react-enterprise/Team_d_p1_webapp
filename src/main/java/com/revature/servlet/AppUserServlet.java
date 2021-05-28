@@ -52,12 +52,16 @@ public class AppUserServlet extends HttpServlet {
         // construct an AppUser
         // send information back to Client
 
-        String username = req.getParameter("username");
-        String password = req.getParameter("password");
-        String email = req.getParameter("email");
-        String firstName = req.getParameter("first_name");
-        String lastName = req.getParameter("last_name");
-        int age = Integer.parseInt(req.getParameter("age"));
+        InputStream json = req.getInputStream();
+        Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+
+        String username = jsonMap.get("username").toString();
+        String password = jsonMap.get("password").toString();
+        String email = jsonMap.get("email").toString();
+        String firstName = jsonMap.get("first_name").toString();
+        String lastName = jsonMap.get("last_name").toString();
+        String ageString = jsonMap.get("age").toString();
+        int age = Integer.parseInt(ageString);
 
         AppUser user = new AppUser();
         user.setUsername(username);
@@ -106,14 +110,12 @@ public class AppUserServlet extends HttpServlet {
 
 
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("put servlet fired");
+
         InputStream json = req.getInputStream();
 
         HttpSession session = req.getSession();
 
-
         Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
-        System.out.println(jsonMap);
 
         AppUser user = null;
         try {
