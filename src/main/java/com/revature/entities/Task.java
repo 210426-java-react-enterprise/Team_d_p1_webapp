@@ -88,8 +88,8 @@ public class Task {
     public boolean getTaskState() {
         return this.taskState;
     }
-    public void setTaskState() {
-        this.taskState = !taskState;
+    public void setTaskState(boolean state) {
+        this.taskState = state;
     }
 
     public int getTaskId() {

@@ -55,6 +55,7 @@ public class ResultSetService {
             task.setTaskMessage(rs.getString("message"));
             task.setDateDue(rs.getString("date_due"));
             task.setUserId(rs.getInt("user_id"));
+            task.setTaskState(rs.getBoolean("task_state"));
 
         }
         return task;

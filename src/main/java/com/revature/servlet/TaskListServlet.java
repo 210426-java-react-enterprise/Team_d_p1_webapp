@@ -91,25 +91,19 @@ public class TaskListServlet extends HttpServlet {
                 }
                 case "content": {
                     String message = jsonMap.get("message").toString();
-                    if (taskService.updateTaskContent(taskId, message)) {
-                        writer.println("Content for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
+                    taskService.updateTaskContent(taskId, message);
+                    writer.println("Content for task #" + taskId + " has been updated");
                     break;
                 }
-                case "dueDate": {
-                    String dueDate = jsonMap.get("dueDate").toString();
-                    if (taskService.updateTaskDueDate(taskId, dueDate)) {
-                        writer.println("Due Date for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
+                case "date_due": {
+                    String dueDate = jsonMap.get("date_due").toString();
+                    taskService.updateTaskDueDate(taskId, dueDate);
+                    writer.println("Due Date for task #" + taskId + " has been updated");
                     break;
                 }
                 case "state": {
-                    if (taskService.updateTaskState(taskId)) {
-                        writer.println("The completed state for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
+                    taskService.updateTaskState(taskId);
+                    writer.println("The completed state for task #" + taskId + " has been updated");
                     break;
 
                 }
