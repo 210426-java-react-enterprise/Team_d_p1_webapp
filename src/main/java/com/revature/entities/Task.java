@@ -17,7 +17,6 @@ public class Task {
     @Column(columnName = "taskState")
     private boolean taskState;
     @PrimaryKey
-    @Column(columnName = "task_id")
     private int taskId;
     @Column(columnName = "user_id")
     private int userId;
@@ -33,11 +32,11 @@ public class Task {
     }
 
     // Constructor for put to update task
-    public Task(String dateDue, String taskTitle, String taskMessage, int taskId) {
+    public Task(String dateDue, String taskTitle, String taskMessage, int userId) {
         this.dateDue = dateDue;
         this.taskTitle = taskTitle;
         this.taskMessage = taskMessage;
-        this.taskId = taskId;
+        this.userId = userId;
         this.taskState = false;
     }
 

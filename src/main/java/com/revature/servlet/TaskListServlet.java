@@ -38,11 +38,11 @@ public class TaskListServlet extends HttpServlet {
             String username = req.getParameter("username");
             AppUser user = appUserService.findUserByUsername(username);
 
-            Task newTask = new Task(dateDue, title, message);
-
-            newTask.setUserId(user.getUserID());
+            Task newTask = new Task(dateDue, title, message, user.getUserID());
 
             taskListService.addTask(newTask);
+
+
 
             resp.setStatus(202);
 

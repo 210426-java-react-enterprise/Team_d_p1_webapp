@@ -47,7 +47,7 @@ public class TaskListService {
         try {
             task.setTaskId(taskId);
 
-            Task removeTask = resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_Id"));
+            Task removeTask = resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
 
             System.out.println(removeTask);
         } catch (Exception e) {
@@ -74,6 +74,10 @@ public class TaskListService {
 
     //    TODO
     public void createTaskList() {
+
+
+
+
     }
 
 
@@ -96,7 +100,7 @@ public class TaskListService {
         boolean isTaskUpdated = false;
 
         try {
-            LinkedList<HashMap> resultTaskList = resultSetService.resultSetToLinkedListTask(StatementType.UPDATE.createStatementWithCondition(newTask, "task_List"));
+            LinkedList<HashMap> resultTaskList = resultSetService.resultSetToLinkedListTask(StatementType.UPDATE.createStatement(task));
 
 
         } catch (SQLException throwables) {
@@ -113,7 +117,7 @@ public class TaskListService {
 
         try {
 
-            LinkedList<HashMap> allList = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(taskList, "task_List"));
+            LinkedList<HashMap> allList = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "task_List"));
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
