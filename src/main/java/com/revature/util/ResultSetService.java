@@ -49,11 +49,13 @@ public class ResultSetService {
 
     public Task resultSetForSingleTask(ResultSet rs) throws SQLException {
         task = new Task();
-        while((rs!=null) && rs.next()) {
-            task.setTaskId(rs.getInt("taskId"));
+        while(rs != null && rs.next()) {
+            task.setTaskId(rs.getInt("task_id"));
             task.setTaskTitle(rs.getString("title"));
             task.setTaskMessage(rs.getString("message"));
-            task.setDateDue(rs.getString("dueDate"));
+            task.setDateDue(rs.getString("date_due"));
+            task.setUserId(rs.getInt("user_id"));
+            task.setTaskState(rs.getBoolean("task_state"));
 
         }
         return task;

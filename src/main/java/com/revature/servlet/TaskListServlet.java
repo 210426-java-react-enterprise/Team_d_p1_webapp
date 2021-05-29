@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -32,17 +33,18 @@ public class TaskListServlet extends HttpServlet {
         // Task state now boolean will only be adjusted from true/false on backend.  Set to true upon creation - everett
 
         try {
-            String title = req.getParameter("title");
-            String message = req.getParameter("message");
-            String dateDue = req.getParameter("dueDate");
-            String username = req.getParameter("username");
+            InputStream json = req.getInputStream();
+            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+
+            String title = jsonMap.get("title").toString();
+            String message = jsonMap.get("message").toString();
+            String dateDue = jsonMap.get("dueDate").toString();
+            String username = jsonMap.get("username").toString();
             AppUser user = appUserService.findUserByUsername(username);
 
             Task newTask = new Task(dateDue, title, message, user.getUserID());
 
             taskListService.addTask(newTask);
-
-
 
             resp.setStatus(202);
 
@@ -80,36 +82,30 @@ public class TaskListServlet extends HttpServlet {
             switch (updateOption) {
                 case "title": {
                     String title = jsonMap.get("title").toString();
-                    if(taskService.updateTaskTitle(taskId, title)) {
+                    taskService.updateTaskTitle(taskId, title);
                         writer.println("Title for task #" + taskId + " has been updated");
                         break;
-                    }
-                    writer.println("Something went wrong.");
-                    break;
+
+//                    writer.println("Something went wrong.");
+//                    break;
 
 
                 }
                 case "content": {
                     String message = jsonMap.get("message").toString();
-                    if (taskService.updateTaskContent(taskId, message)) {
-                        writer.println("Content for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
+                    taskService.updateTaskContent(taskId, message);
+                    writer.println("Content for task #" + taskId + " has been updated");
                     break;
                 }
-                case "dueDate": {
-                    String dueDate = jsonMap.get("dueDate").toString();
-                    if (taskService.updateTaskDueDate(taskId, dueDate)) {
-                        writer.println("Due Date for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
+                case "date_due": {
+                    String dueDate = jsonMap.get("date_due").toString();
+                    taskService.updateTaskDueDate(taskId, dueDate);
+                    writer.println("Due Date for task #" + taskId + " has been updated");
                     break;
                 }
                 case "state": {
-                    if (taskService.updateTaskState(taskId)) {
-                        writer.println("The completed state for task #" + taskId + " has been updated");
-                    }
-                    writer.println("Something went wrong.");
+                    taskService.updateTaskState(taskId);
+                    writer.println("The completed state for task #" + taskId + " has been updated");
                     break;
 
                 }
@@ -146,13 +142,24 @@ public class TaskListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            InputStream json = req.getInputStream();
+            LinkedList<HashMap> tasks;
+            HttpSession session = req.getSession(false);
+            AppUser requestingUser = (session == null) ? null : (AppUser) session.getAttribute("this-user");
+            if (requestingUser == null) {
+                resp.setStatus(401);
+                return;
+            } else if (requestingUser.getUsername().equals("admin")) {
+                tasks = taskListService.getAllUncompletedTasks();
+                session.setAttribute("uncompleted_tasks",tasks);
+                return;
+            }else{
+                InputStream json = req.getInputStream();
 
-            Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
+                Map<String, Object> jsonMap = new ObjectMapper().readValue(json, HashMap.class);
 
-            String username = jsonMap.get("username").toString();
-
-            LinkedList<HashMap> tasks = taskListService.getAllTasksByUsername(username);
+                String username = jsonMap.get("username").toString();
+                tasks = taskListService.getAllTasksByUsername(username);
+            }
 
             String taskJSONString = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(tasks);
 
@@ -162,7 +169,6 @@ public class TaskListServlet extends HttpServlet {
 
         } catch (ImproperConfigurationException e) {
             resp.setStatus(500);
-            return;
         } catch (Exception e) {
             e.printStackTrace();
         }

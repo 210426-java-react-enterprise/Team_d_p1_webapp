@@ -44,12 +44,10 @@ public class TaskListService {
 
     //    TODO create db call to remove task from task table by ID
     public void removeTask(int taskId) {
+        task = new Task();
+        task.setTaskId(taskId);
         try {
-            task.setTaskId(taskId);
-
-            Task removeTask = resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
-
-            System.out.println(removeTask);
+            resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -66,6 +64,16 @@ public class TaskListService {
         task.setUserId(userId);
 
         LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
+
+        return tasks;
+
+    }
+
+    // TODO create db call that gets all tasks by username
+    public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException {
+        Task task1 = new Task();
+        task1.setTaskState(false);
+        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1,"task_state"));
 
         return tasks;
 

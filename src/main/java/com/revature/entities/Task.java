@@ -16,19 +16,20 @@ public class Task {
     private String taskMessage;
     @Column(columnName = "task_state")
     private boolean taskState;
-    @PrimaryKey
-    private int taskId;
+    @PrimaryKey(name = "task_id")
+    private int task_id;
     @Column(columnName = "user_id")
     private int userId;
 
 
     // Constructor for getting task from database or from front end to be updated in db
-    public Task(String dateDue, String taskTitle, String taskMessage, boolean taskState, int taskId) {
+    public Task(String dateDue, String taskTitle, String taskMessage, boolean taskState, int taskId, int user_id) {
         this.dateDue = dateDue;
         this.taskTitle = taskTitle;
         this.taskMessage = taskMessage;
-        this.taskId = taskId;
+        this.task_id = taskId;
         this.taskState = taskState;
+        this.userId = user_id;
     }
 
     // Constructor for put to update task
@@ -87,16 +88,16 @@ public class Task {
     public boolean getTaskState() {
         return this.taskState;
     }
-    public void setTaskState() {
-        this.taskState = !taskState;
+    public void setTaskState(boolean state) {
+        this.taskState = state;
     }
 
     public int getTaskId() {
-        return taskId;
+        return task_id;
     }
 
     public void setTaskId(int taskId) {
-        this.taskId = taskId;
+        this.task_id = taskId;
     }
     @Override
     public String toString() {
@@ -105,6 +106,7 @@ public class Task {
         sb.append(", taskTitle='").append(taskTitle).append('\'');
         sb.append(", taskMessage='").append(taskMessage).append('\'');
         sb.append(", taskState='").append(taskState).append('\'');
+        sb.append(", taskId='").append(task_id).append('\'');
         sb.append('}');
         return sb.toString();
     }
