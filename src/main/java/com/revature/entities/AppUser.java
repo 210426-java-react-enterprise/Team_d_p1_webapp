@@ -26,7 +26,7 @@ public class AppUser {
     private String email;
     @Column(columnName = "age")
     private int age;
-    @PrimaryKey
+    @PrimaryKey(name = "user_id")
     private int userID;
 
 
