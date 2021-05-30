@@ -5,7 +5,6 @@ import com.revature.annotations.Entity;
 import com.revature.annotations.PrimaryKey;
 import com.revature.annotations.Table;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,7 +25,7 @@ public class AppUser {
     private String email;
     @Column(columnName = "age")
     private int age;
-    @PrimaryKey
+    @PrimaryKey(name = "user_id")
     private int userID;
 
 

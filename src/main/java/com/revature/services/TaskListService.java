@@ -9,7 +9,6 @@ import com.revature.util.AppState;
 import com.revature.util.ResultSetService;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -28,18 +27,24 @@ public class TaskListService {
 
 
     //    TODO create database call to ORM to persist task
-    public void addTask(Task newTask) {
-        try {
+    public boolean addTask(Task newTask) {
+        if (newTask == null || newTask.getTaskMessage().trim().isEmpty()) {
+            return true;
+            //throw new InvalidEntryException("Invalid entry, please try again.");
 
-            Task returnsTask = resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
 
-            System.out.println(returnsTask);
+        } else if (newTask != null) {
+            try {
+                Task returnsTask = resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+                System.out.println(returnsTask);
+                System.out.println("Hypothetical task has been added: " + newTask.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        System.out.println("Hypothetical task has been added: " + newTask.toString());
+        return false;
     }
 
     //    TODO create db call to remove task from task table by ID
@@ -56,7 +61,7 @@ public class TaskListService {
     }
 
     // TODO create db call that gets all tasks by username
-    public LinkedList<HashMap> getAllTasksByUsername(String username) throws ImproperConfigurationException, SQLException {
+    public LinkedList<HashMap> getAllTasksByUsername(String username) throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
 
         AppUser user = appUserService.findUserByUsername(username);
         int userId = user.getUserID();
@@ -70,7 +75,7 @@ public class TaskListService {
     }
 
     // TODO create db call that gets all tasks by username
-    public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException {
+    public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
         Task task1 = new Task();
         task1.setTaskState(false);
         LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1,"task_state"));
