@@ -154,11 +154,10 @@ public class TaskListServlet extends HttpServlet {
         try {
             LinkedList<HashMap> tasks;
             HttpSession session = req.getSession(false);
-            AppUser requestingUser = (session == null) ? null : (AppUser) session.getAttribute("this-user");
-            if (requestingUser == null) {
-                resp.setStatus(401);
-                return;
-            } else if (requestingUser.getUsername().equals("admin")) {
+            AppUser user = new AppUser();
+            user.setUsername("");
+            AppUser requestingUser = (session == null) ? user : (AppUser) session.getAttribute("this-user");
+            if (requestingUser.getUsername().equals("admin")) {
                 tasks = taskListService.getAllUncompletedTasks();
                 session.setAttribute("uncompleted_tasks",tasks);
                 return;
