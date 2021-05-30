@@ -1,13 +1,12 @@
 package com.revature.services;
 
-import com.revature.util.ResultSetService;
+import com.revature.util.ResultSetDTO;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import static org.junit.Assert.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
 /** 
@@ -22,7 +21,7 @@ public class TaskListServiceTest {
     TaskListService sut;
 
     @Mock
-    ResultSetService mockResultSetService;
+    ResultSetDTO mockResultSetDTO;
 
 @Before
 public void before() throws Exception {
@@ -32,7 +31,7 @@ public void before() throws Exception {
 @After
 public void after() throws Exception {
     sut = null;
-    mockResultSetService = null;
+    mockResultSetDTO = null;
 } 
 
 /** 

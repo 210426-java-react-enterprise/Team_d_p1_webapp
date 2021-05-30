@@ -11,7 +11,7 @@ import com.revature.exceptions.invalid.InvalidUsernameException;
 import com.revature.statements.StatementBuilder;
 import com.revature.statements.StatementType;
 import com.revature.util.ORMState;
-import com.revature.util.ResultSetService;
+import com.revature.util.ResultSetDTO;
 import com.revature.util.datasource.ConnectionFactory;
 import org.junit.Test;
 import org.junit.Before; 
@@ -42,7 +42,7 @@ public class AppUserServiceTest {
     AppUserService sut;
 
     @Mock
-    ResultSetService mockResultSetService;
+    ResultSetDTO mockResultSetDTO;
 
     @Mock
     StatementType mockStatementType;
@@ -62,7 +62,7 @@ public class AppUserServiceTest {
     @After
     public void after(){
     sut = null;
-    mockResultSetService = null;
+    mockResultSetDTO = null;
     rs = null;
     mockStatementBuilder = null;
     mockStatementType = null;
@@ -161,7 +161,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,7 +178,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             assertFalse(sut.isUsernameAvailable(userToTest.getUsername()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -193,7 +193,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,7 +211,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             assertFalse(sut.isEmailAvailable(userToTest.getEmail()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,7 +231,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(null);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(null);
             sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
         }
     }
@@ -246,7 +246,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
         }
     }
@@ -265,7 +265,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             assertEquals(userToTest, sut.findUserByUsername("registeredUser"));
         }
     }
@@ -289,7 +289,7 @@ public class AppUserServiceTest {
             when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
-            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            when(mockResultSetDTO.resultSetToUser(any())).thenReturn(userToTest);
             sut.registerUser(userToTest);
         }
 

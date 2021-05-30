@@ -7,7 +7,7 @@ import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.ResourceNotFoundException;
 import com.revature.statements.StatementType;
 import com.revature.util.AppState;
-import com.revature.util.ResultSetService;
+import com.revature.util.ResultSetDTO;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,12 +18,12 @@ public class TaskListService {
     private Task newTask;
     private Task task;
     private AppUser user;
-    private final ResultSetService resultSetService;
+    private final ResultSetDTO resultSetDTO;
     private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
 
-    public TaskListService(ResultSetService resultSetService) {
-        this.resultSetService = resultSetService;
+    public TaskListService(ResultSetDTO resultSetDTO) {
+        this.resultSetDTO = resultSetDTO;
     }
 
 
@@ -36,7 +36,7 @@ public class TaskListService {
 
         } else if (newTask != null) {
             try {
-                Task returnsTask = resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
+                Task returnsTask = resultSetDTO.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
 
                 System.out.println(returnsTask);
                 System.out.println("Hypothetical task has been added: " + newTask.toString());
@@ -57,7 +57,7 @@ public class TaskListService {
             return true;
         } else {
             try {
-                resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
+                resultSetDTO.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
                 System.out.println("Task has been deleted");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -74,7 +74,7 @@ public class TaskListService {
         Task task = new Task();
         task.setUserId(userId);
 
-        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
+        LinkedList<HashMap> tasks = resultSetDTO.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
         if (tasks == null) {
             throw new ResourceNotFoundException();
         }
@@ -87,7 +87,7 @@ public class TaskListService {
     public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
         Task task1 = new Task();
         task1.setTaskState(false);
-        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
+        LinkedList<HashMap> tasks = resultSetDTO.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
 
         return tasks;
     }
