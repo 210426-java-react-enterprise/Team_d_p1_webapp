@@ -93,7 +93,6 @@ public class TaskListServlet extends HttpServlet {
 //                    writer.println("Something went wrong.");
 //                    break;
 
-
                 }
                 case "content": {
                     String message = jsonMap.get("message").toString();
@@ -134,10 +133,17 @@ public class TaskListServlet extends HttpServlet {
             String taskIdString = jsonMap.get("taskId").toString();
             int taskId = Integer.parseInt(taskIdString);
 
-            taskListService.removeTask(taskId);
+            if(taskListService.removeTask(taskId) == true){
+            resp.setStatus(400);
+            resp.getWriter().print("Negative entries not allowed. Please try again.");
+            } else {
 
+            resp.setStatus(200);
             resp.getWriter().println("Task has been deleted");
-        } catch (Exception e) {
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
 

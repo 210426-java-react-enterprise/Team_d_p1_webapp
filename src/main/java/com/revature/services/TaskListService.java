@@ -4,6 +4,7 @@ import com.revature.entities.AppUser;
 import com.revature.entities.Task;
 import com.revature.entities.TaskList;
 import com.revature.exception.ImproperConfigurationException;
+import com.revature.exceptions.ResourceNotFoundException;
 import com.revature.statements.StatementType;
 import com.revature.util.AppState;
 import com.revature.util.ResultSetService;
@@ -48,16 +49,21 @@ public class TaskListService {
     }
 
     //    TODO create db call to remove task from task table by ID
-    public void removeTask(int taskId) {
+    public boolean removeTask(int taskId) {
         task = new Task();
         task.setTaskId(taskId);
-        try {
-            resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        System.out.println("Task has been deleted");
+        if (taskId <= 0) {
+            return true;
+        } else {
+            try {
+                resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
+                System.out.println("Task has been deleted");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
     }
 
     // TODO create db call that gets all tasks by username
@@ -69,6 +75,9 @@ public class TaskListService {
         task.setUserId(userId);
 
         LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
+        if (tasks == null) {
+            throw new ResourceNotFoundException();
+        }
 
         return tasks;
 
@@ -78,9 +87,10 @@ public class TaskListService {
     public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
         Task task1 = new Task();
         task1.setTaskState(false);
-        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1,"task_state"));
+        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
 
         return tasks;
+    }
 
     }
 
