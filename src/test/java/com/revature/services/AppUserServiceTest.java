@@ -55,9 +55,10 @@ public class AppUserServiceTest {
     public void testRegisterValidUser() throws Exception {
     //TODO: Test goes here...
         AppUser userToTest = new AppUser();
-        userToTest.setUsername("9letters");
-        userToTest.setPassword("9letters");
-        userToTest.setEmail("email@test.com");
+        userToTest.setUsername("dcharleo");
+        userToTest.setPassword("o7VnKuXBx");
+        userToTest.setEmail("dcharleo@ucoz.com");
+        sut.registerUser(userToTest);
     }
 
     @Test(expected = InvalidUsernameException.class)
@@ -83,7 +84,7 @@ public class AppUserServiceTest {
         AppUser userToTest = new AppUser();
         userToTest.setUsername("9Letters");
         userToTest.setPassword("9Letters");
-        userToTest.setEmail("emailtest.com");
+        userToTest.setEmail("email@test.com");
 
         sut.registerUser(userToTest);
     }
