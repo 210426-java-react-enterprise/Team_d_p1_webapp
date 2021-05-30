@@ -10,8 +10,11 @@ import com.revature.util.AppState;
 import com.revature.util.ResultSetService;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskListService {
     private TaskList taskList;
@@ -78,8 +81,12 @@ public class TaskListService {
         if (tasks == null) {
             throw new ResourceNotFoundException();
         }
+        task.setTaskTitle(tasks.get(0).get("task_state").toString());
+        List<HashMap> tempList = tasks.stream().sorted((Comparator.comparing(o -> o.get("task_state").toString()))).collect(Collectors.toList());
+        LinkedList<HashMap> sortedTasks= new LinkedList<>();
+        sortedTasks.addAll(tempList);
 
-        return tasks;
+        return sortedTasks;
 
     }
 
