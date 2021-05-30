@@ -63,6 +63,9 @@ public class AppUserServiceTest {
     public void after(){
     sut = null;
     mockResultSetService = null;
+    rs = null;
+    mockStatementBuilder = null;
+    mockStatementType = null;
 }
     /**
      *
