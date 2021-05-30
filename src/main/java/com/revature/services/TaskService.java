@@ -25,7 +25,7 @@ public class TaskService {
 
         Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
 
-        actualTask.setTaskTitle(newContent);
+        actualTask.setTaskMessage(newContent);
         actualTask.setTaskId(taskId);
 
         try {

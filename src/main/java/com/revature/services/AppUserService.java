@@ -56,8 +56,8 @@ public class AppUserService {
         if(!isEmailAvailable(userToBeRegistered.getEmail())){
             throw new EmailTakenException("\nEmail is taken");
         }
-
-        return resultSetService.resultSetToUser(StatementType.INSERT.createStatement(userToBeRegistered));
+        StatementType.INSERT.createStatement(userToBeRegistered);
+        return userToBeRegistered;
     }
 
 
