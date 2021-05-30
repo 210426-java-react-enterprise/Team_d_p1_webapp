@@ -8,17 +8,26 @@ import com.revature.exceptions.UsernameTakenException;
 import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
+import com.revature.statements.StatementBuilder;
+import com.revature.statements.StatementType;
+import com.revature.util.ORMState;
 import com.revature.util.ResultSetService;
+import com.revature.util.datasource.ConnectionFactory;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.MockitoAnnotations.openMocks;
+import static org.mockito.Mockito.when;
 
 /** 
 * AppUserService Tester. 
@@ -35,119 +44,31 @@ public class AppUserServiceTest {
     @Mock
     ResultSetService mockResultSetService;
 
+    @Mock
+    StatementType mockStatementType;
+
+    @Mock
+    ResultSet rs;
+
+    @Mock
+    StatementBuilder mockStatementBuilder;
+
     @Before
-    public void before(){
-    openMocks(this);
+    public void before() throws Exception{
+        ConnectionFactory.setConnection("task-force.c2iiztx3t7wq.us-east-1.rds.amazonaws.com","postgres","revature","test");
+        openMocks(this);
 } 
 
     @After
     public void after(){
     sut = null;
     mockResultSetService = null;
-} 
-
+}
     /**
-    *
-    * Method: registerUser()
-    *
-    */
-    @Test
-    public void testRegisterValidUser() throws Exception {
-    //TODO: Test goes here...
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("9letters");
-        userToTest.setPassword("9letters");
-        userToTest.setEmail("email@test.com");
-    }
-
-    @Test(expected = InvalidUsernameException.class)
-    public void testRegisterUserWithInvalidName() throws Exception {
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("two");
-        userToTest.setPassword("9letters");
-        userToTest.setEmail("email@test.com");
-    }
-
-    @Test(expected = InvalidPasswordException.class)
-    public void testRegisterUserWithInvalidPassword() throws Exception {
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("9Letters");
-        userToTest.setPassword("two");
-        userToTest.setEmail("email@test.com");
-
-        sut.registerUser(userToTest);
-    }
-
-    @Test(expected = InvalidEmailException.class)
-    public void testRegisterUserWithInvalidEmail() throws Exception {
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("9Letters");
-        userToTest.setPassword("9Letters");
-        userToTest.setEmail("emailtest.com");
-
-        sut.registerUser(userToTest);
-    }
-
-    @Test
-    public void testRegisterUserWithAvailableUsername() throws UsernameTakenException, SQLException, ImproperConfigurationException {
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("Available");
-        assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
-    }
-
-    @Test (expected = UsernameTakenException.class)
-    public void testRegisterUserWithTakenUsername() throws UsernameTakenException, SQLException, ImproperConfigurationException {
-        // Test case will fail
-
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("taken");
-        sut.isUsernameAvailable(userToTest.getUsername());
-    }
-
-    @Test
-    public void testRegisterUserWithAvailableEmail() throws EmailTakenException, SQLException, ImproperConfigurationException {
-        AppUser userToTest = new AppUser();
-        userToTest.setEmail("TestEmail@email.com");
-        assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
-    }
-
-    @Test (expected = EmailTakenException.class)
-    public void testRegisterUserWithTakenEmail() throws EmailTakenException, SQLException, ImproperConfigurationException {
-        // Test case will fail at this moment
-
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("TakenEmail@email.com");
-        sut.isEmailAvailable(userToTest.getEmail());
-    }
-
-
-    /**
-    *
-    * Method: loginUser()
-    *
-    */
-    @Test
-    public void testLoginUser() throws Exception {
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("TestUser");
-        userToTest.setPassword("Password12");
-        AppUser loginUserTest = sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
-        assertNotNull(loginUserTest);
-    }
-
-    @Test (expected = UserNotFoundException.class)
-    public void testLoginNullCredentials() throws UserNotFoundException, SQLException, ImproperConfigurationException {
-        // Test Will fail
-        AppUser userToTest = new AppUser();
-        sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
-    }
-
-
-    /**
-    *
-    * Method: isValidUsername(String username)
-    *
-    */
+     *
+     * Method: isValidUsername(String username)
+     *
+     */
     @Test
     public void testIsValidUsernameWithValidInfo(){
         String validUsername = "9letters";
@@ -164,10 +85,10 @@ public class AppUserServiceTest {
     }
 
     /**
-    *
-    * Method: isValidPassword(String password)
-    *
-    */
+     *
+     * Method: isValidPassword(String password)
+     *
+     */
     @Test
     public void testIsValidPassword(){
         String validPassword = "9letters";
@@ -183,11 +104,13 @@ public class AppUserServiceTest {
         assertFalse(sut.isValidPassword(null));
     }
 
+
+
     /**
-    *
-    * Method: isValidEmail(String email)
-    *
-    */
+     *
+     * Method: isValidEmail(String email)
+     *
+     */
     @Test
     public void testIsValidEmail(){
         String validEmail = "test@email.com";
@@ -201,6 +124,206 @@ public class AppUserServiceTest {
     @Test
     public void testIsValidEmailWithNull(){
         assertFalse(sut.isValidEmail(null));
+    }
+
+
+
+    /**
+    *
+    * Method: registerUser()
+    *
+    */
+
+    @Test(expected = InvalidUsernameException.class)
+    public void testRegisterUserWithInvalidUsername() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("two");
+        sut.registerUser(userToTest);
+
+    }
+
+    @Test(expected = InvalidPasswordException.class)
+    public void testRegisterUserWithInvalidPassword() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("9Letters");
+        userToTest.setPassword("two");
+        sut.registerUser(userToTest);
+    }
+
+    @Test(expected = InvalidEmailException.class)
+    public void testRegisterUserWithInvalidEmail() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("9Letters");
+        userToTest.setPassword("9Letters");
+        userToTest.setEmail("emailtest.com");
+
+        sut.registerUser(userToTest);
+    }
+
+    @Test
+    public void testIsUsernameAvailableTrue() throws UsernameTakenException, SQLException, ImproperConfigurationException {
+        AppUser userToTest = new AppUser();
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            assertTrue(sut.isUsernameAvailable(userToTest.getUsername()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIsUsernameAvailableFalse() throws UsernameTakenException, SQLException, ImproperConfigurationException {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("takenUsername");
+        userToTest.setPassword("password1!");
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            assertFalse(sut.isUsernameAvailable(userToTest.getUsername()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIsEmailAvailableTrue() throws EmailTakenException, SQLException, ImproperConfigurationException {
+        AppUser userToTest = new AppUser();
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            assertTrue(sut.isEmailAvailable(userToTest.getEmail()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIsEmailAvailableFalse() throws EmailTakenException, SQLException, ImproperConfigurationException {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("Available");
+        userToTest.setPassword("password1!");
+        userToTest.setEmail("availableEmail@email.com");
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            assertFalse(sut.isEmailAvailable(userToTest.getEmail()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+    *
+    * Method: loginUser()
+    *
+    */
+    @Test (expected = UserNotFoundException.class)
+    public void testLoginUserUsernameNotFound() throws Exception {
+        AppUser userToTest = new AppUser();
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(null);
+            sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
+        }
+    }
+
+    @Test
+    public void testLoginUser() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("registeredUser");
+        userToTest.setPassword("password1!");
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            sut.loginUser(userToTest.getUsername(), userToTest.getPassword());
+        }
+    }
+
+    /**
+     * finduserbyusername
+     */
+
+    @Test
+    public void testFindUserByUsername() throws Exception{
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("registeredUser");
+        userToTest.setPassword("password1!");
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            assertEquals(userToTest, sut.findUserByUsername("registeredUser"));
+        }
+    }
+
+
+    /**
+     * registerUser
+     */
+
+    @Test (expected = UsernameTakenException.class)
+    public void testRegisterUserUsernameTaken() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("registeredUser");
+        userToTest.setPassword("password1!");
+        userToTest.setEmail("testEmail@email.com");
+        userToTest.setFirstName("test");
+        userToTest.setLastName("user");
+        userToTest.setAge(33);
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.SELECT.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetService.resultSetToUser(any())).thenReturn(userToTest);
+            sut.registerUser(userToTest);
+        }
+
+    }
+
+    @Test (expected = InvalidUsernameException.class)
+    public void registerUserInvalidUsername() throws Exception{
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("reg");
+        sut.registerUser(userToTest);
+    }
+
+    @Test (expected = InvalidPasswordException.class)
+    public void registerUserInvalidPassword() throws SQLException, EmailTakenException, ImproperConfigurationException, InvalidPasswordException, InvalidUsernameException, UsernameTakenException, InvalidEmailException {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("ValidUsername");
+        userToTest.setPassword("pass");
+        sut.registerUser(userToTest);
+    }
+
+    @Test (expected = InvalidEmailException.class)
+    public void registerUserInvalidEmail() throws Exception {
+        AppUser userToTest = new AppUser();
+        userToTest.setUsername("ValidUsername");
+        userToTest.setPassword("password!1");
+        userToTest.setEmail("invalidemail");
+        sut.registerUser(userToTest);
     }
 
 
