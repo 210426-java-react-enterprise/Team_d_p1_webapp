@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class ResultSetService {
+public class ResultSetDTO {
 
     private ResultSet rs;
     private Task task;
@@ -16,7 +16,6 @@ public class ResultSetService {
     public LinkedList<HashMap> resultSetToLinkedListTask(ResultSet rs) throws SQLException {
         HashMap<String, Object> resultMap = new HashMap<>();
         LinkedList<HashMap> taskList = new LinkedList<>();
-
 
         while((rs!=null) && rs.next()) {
             resultMap = new HashMap<>();

@@ -3,7 +3,7 @@ package com.revature.services;
 import com.revature.entities.Task;
 import com.revature.exception.ImproperConfigurationException;
 import com.revature.statements.StatementType;
-import com.revature.util.ResultSetService;
+import com.revature.util.ResultSetDTO;
 
 import java.sql.SQLException;
 
@@ -11,10 +11,10 @@ public class TaskService {
 
     private Task task;
     private Task resultTask;
-    private final ResultSetService resultSetService;
+    private final ResultSetDTO resultSetDTO;
 
-    public TaskService(ResultSetService resultSetService) {
-        this.resultSetService = resultSetService;
+    public TaskService(ResultSetDTO resultSetDTO) {
+        this.resultSetDTO = resultSetDTO;
     }
 
     public boolean updateTaskContent(int taskId, String newContent) throws ImproperConfigurationException, SQLException {
@@ -23,7 +23,7 @@ public class TaskService {
         task.setTaskMessage(newContent);
         task.setTaskId(taskId);
 
-        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+        Task actualTask = resultSetDTO.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
 
         actualTask.setTaskMessage(newContent);
         actualTask.setTaskId(taskId);
@@ -47,7 +47,7 @@ public class TaskService {
         task.setTaskTitle(newTitle);
         task.setTaskId(taskId);
 
-        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+        Task actualTask = resultSetDTO.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
 
         actualTask.setTaskTitle(newTitle);
         actualTask.setTaskId(taskId);
@@ -71,7 +71,7 @@ public class TaskService {
         task.setDateDue(newDueDate);
         task.setTaskId(taskId);
 
-        Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+        Task actualTask = resultSetDTO.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
 
         actualTask.setDateDue(newDueDate);
         actualTask.setTaskId(taskId);
@@ -90,7 +90,7 @@ public class TaskService {
        task.setTaskId(taskId);
 
         try {
-            Task actualTask = resultSetService.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
+            Task actualTask = resultSetDTO.resultSetForSingleTask(StatementType.SELECT.createStatementWithCondition(task, "task_id"));
             System.out.println("before: " + actualTask);
             actualTask.setTaskState(!actualTask.getTaskState());
             System.out.println("\n\n\nafter: "+actualTask);
