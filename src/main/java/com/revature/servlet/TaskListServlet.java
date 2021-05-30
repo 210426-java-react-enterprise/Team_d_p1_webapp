@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.entities.AppUser;
 import com.revature.entities.Task;
 import com.revature.exception.ImproperConfigurationException;
+import com.revature.exceptions.ResourceNotFoundException;
 import com.revature.services.AppUserService;
 import com.revature.services.TaskListService;
 import com.revature.services.TaskService;
@@ -29,7 +30,7 @@ public class TaskListServlet extends HttpServlet {
     private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,  IOException {
         // Task state now boolean will only be adjusted from true/false on backend.  Set to true upon creation - everett
 
         try {
@@ -44,17 +45,20 @@ public class TaskListServlet extends HttpServlet {
 
             Task newTask = new Task(dateDue, title, message, user.getUserID());
 
-            taskListService.addTask(newTask);
-
-            resp.setStatus(202);
-
-            resp.getWriter().print("Task has been created");
-        } catch (Exception e) {
+            if (taskListService.addTask(newTask) == true) {
+                resp.setStatus(400);
+                resp.getWriter().print("Task cannot have null entry.");
+            } else {
+                resp.setStatus(202);
+                resp.getWriter().print("Task has been created");
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
+
+
+
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -88,7 +92,6 @@ public class TaskListServlet extends HttpServlet {
 
 //                    writer.println("Something went wrong.");
 //                    break;
-
 
                 }
                 case "content": {
@@ -130,10 +133,17 @@ public class TaskListServlet extends HttpServlet {
             String taskIdString = jsonMap.get("taskId").toString();
             int taskId = Integer.parseInt(taskIdString);
 
-            taskListService.removeTask(taskId);
+            if(taskListService.removeTask(taskId) == true){
+            resp.setStatus(400);
+            resp.getWriter().print("Negative entries not allowed. Please try again.");
+            } else {
 
+            resp.setStatus(200);
             resp.getWriter().println("Task has been deleted");
-        } catch (Exception e) {
+        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
 
@@ -166,7 +176,7 @@ public class TaskListServlet extends HttpServlet {
 
             resp.getWriter().println(taskJSONString);
 
-        } catch (ImproperConfigurationException e) {
+        } catch (ImproperConfigurationException | ResourceNotFoundException e) {
             resp.setStatus(500);
         } catch (Exception e) {
             e.printStackTrace();

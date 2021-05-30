@@ -150,16 +150,6 @@ public class AppUserServiceTest {
         sut.registerUser(userToTest);
     }
 
-    @Test(expected = InvalidEmailException.class)
-    public void testRegisterUserWithInvalidEmail() throws Exception {
-        AppUser userToTest = new AppUser();
-        userToTest.setUsername("9Letters");
-        userToTest.setPassword("9Letters");
-        userToTest.setEmail("emailtest.com");
-
-        sut.registerUser(userToTest);
-    }
-
     @Test
     public void testIsUsernameAvailableTrue() throws UsernameTakenException, SQLException, ImproperConfigurationException {
         AppUser userToTest = new AppUser();

@@ -13,7 +13,6 @@ import com.revature.services.AppUserService;
 import com.revature.util.AppState;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -124,11 +123,11 @@ public class AppUserServlet extends HttpServlet {
             e.printStackTrace();
         }
         System.out.println(user);
-        if(user.getUserID() == 0) {
+        if(user.getUserID() == 0){
             resp.getWriter().println("Please check your credentials");
         } else {
 
-            resp.getWriter().println("Succesfully Logged In: \n" + user.getUsername());
+            resp.getWriter().println("Successfully Logged In: \n" + user.getUsername());
             session.setAttribute("this-user",user);
         }
 
