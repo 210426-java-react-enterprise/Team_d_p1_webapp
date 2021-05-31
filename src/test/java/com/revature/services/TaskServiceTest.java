@@ -123,7 +123,7 @@ public void after() throws Exception {
     public void validTaskDueDateUpdate() {
     Task task = new Task();
     task.setTaskId(500);
-    task.setDateDue("12/12/2020");
+    task.setDateDue("1/11/2010");
     try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
         mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
         when(ORMState.getStatementBuilder("update")).thenReturn(mockStatementBuilder);
@@ -153,4 +153,25 @@ public void after() throws Exception {
 
 }
 
-} 
+@Test
+    public void testMessageLengthError() throws SQLException, ImproperConfigurationException {
+        Task task = new Task();
+        task.setTaskId(500);
+        String message = " Test phrase";
+        when(mockStatementBuilder.buildStatement(any(),any())).thenThrow(new SQLException());
+        sut.updateTaskContent(task.getTaskId(), message);
+    }
+
+
+
+@Test
+    public void taskLengthError() throws SQLException, ImproperConfigurationException {
+        Task task = new Task();
+        task.setTaskId(500);
+        String title = "Test phrase";
+        when(mockStatementBuilder.buildStatement(any(),any())).thenThrow(new SQLException());
+        sut.updateTaskTitle(task.getTaskId(), title);
+}
+
+}
+

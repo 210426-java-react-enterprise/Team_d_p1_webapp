@@ -48,6 +48,7 @@ public class TaskService {
     }
 
     public boolean updateTaskTitle(int taskId, String newTitle) throws ImproperConfigurationException, SQLException {
+
         if(!titleValidation(newTitle)) {
 
             throw new TitleLengthOutOFBoundsException("Title too long - limit 50 characters");
@@ -74,6 +75,7 @@ public class TaskService {
     }
 
     public boolean updateTaskDueDate(int taskId, String newDueDate) throws ImproperConfigurationException, SQLException {
+
         if(!dateValidation(newDueDate)) {
 
             throw new DateFormatException("Please format dates mm/dd/yyyy");
@@ -134,7 +136,6 @@ public class TaskService {
 
     private boolean dateValidation(String date) {
         if(!datePattern.matcher(date).matches()) {
-
             return false;
         }
         return true;
