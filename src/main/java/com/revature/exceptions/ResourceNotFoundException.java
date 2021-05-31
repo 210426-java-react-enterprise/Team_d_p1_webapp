@@ -1,4 +1,5 @@
 package com.revature.exceptions;
 
-public class ResourceNotFoundException extends Throwable {
+public class ResourceNotFoundException extends Exception {
+
 }

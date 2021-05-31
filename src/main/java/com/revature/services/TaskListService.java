@@ -22,7 +22,7 @@ public class TaskListService {
     private Task task;
     private AppUser user;
     private final ResultSetDTO resultSetDTO;
-    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
+    private AppUserService appUserService = AppState.getInstance().getAppUserService();
 
 
     public TaskListService(ResultSetDTO resultSetDTO) {

@@ -9,6 +9,7 @@ import com.revature.exceptions.invalid.InvalidUsernameException;
 import com.revature.statements.StatementType;
 import com.revature.util.ResultSetDTO;
 
+
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 

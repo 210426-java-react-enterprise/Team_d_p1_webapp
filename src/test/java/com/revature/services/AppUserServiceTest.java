@@ -108,7 +108,6 @@ public class AppUserServiceTest {
     }
 
 
-
     /**
      *
      * Method: isValidEmail(String email)
