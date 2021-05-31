@@ -1,5 +1,6 @@
 package com.revature.services;
 
+
 import com.revature.entities.Task;
 import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.DateFormatException;
@@ -25,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.openMocks;
 
+
 /** 
 * TaskService Tester. 
 * 
@@ -36,6 +38,7 @@ public class TaskServiceTest {
 
     @InjectMocks
     TaskService sut;
+
 
     @Mock
     ResultSetDTO mockResultSetDTO;
@@ -162,8 +165,6 @@ public void after() throws Exception {
         sut.updateTaskContent(task.getTaskId(), message);
     }
 
-
-
 @Test
     public void taskLengthError() throws SQLException, ImproperConfigurationException {
         Task task = new Task();
@@ -171,6 +172,7 @@ public void after() throws Exception {
         String title = "Test phrase";
         when(mockStatementBuilder.buildStatement(any(),any())).thenThrow(new SQLException());
         sut.updateTaskTitle(task.getTaskId(), title);
+
 }
 
 }

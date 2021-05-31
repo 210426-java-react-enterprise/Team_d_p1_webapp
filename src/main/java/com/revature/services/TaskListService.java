@@ -10,8 +10,11 @@ import com.revature.util.AppState;
 import com.revature.util.ResultSetDTO;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskListService {
     private TaskList taskList;
@@ -19,7 +22,7 @@ public class TaskListService {
     private Task task;
     private AppUser user;
     private final ResultSetDTO resultSetDTO;
-    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
+    private AppUserService appUserService = AppState.getInstance().getAppUserService();
 
 
     public TaskListService(ResultSetDTO resultSetDTO) {
@@ -30,7 +33,7 @@ public class TaskListService {
     //    TODO create database call to ORM to persist task
     public boolean addTask(Task newTask) {
         if (newTask == null || newTask.getTaskMessage().trim().isEmpty()) {
-            return true;
+            return false;
             //throw new InvalidEntryException("Invalid entry, please try again.");
 
 
@@ -45,7 +48,7 @@ public class TaskListService {
                 e.printStackTrace();
             }
         }
-        return false;
+        return true;
     }
 
     //    TODO create db call to remove task from task table by ID
@@ -54,7 +57,7 @@ public class TaskListService {
         task.setTaskId(taskId);
 
         if (taskId <= 0) {
-            return true;
+            return false;
         } else {
             try {
                 resultSetDTO.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
@@ -62,13 +65,13 @@ public class TaskListService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return false;
+            return true;
         }
     }
 
     // TODO create db call that gets all tasks by username
     public LinkedList<HashMap> getAllTasksByUsername(String username) throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
-
+        appUserService = AppState.getInstance().getAppUserService();
         AppUser user = appUserService.findUserByUsername(username);
         int userId = user.getUserID();
         Task task = new Task();
@@ -79,7 +82,13 @@ public class TaskListService {
             throw new ResourceNotFoundException();
         }
 
-        return tasks;
+            //used to organize the tasks by task_state, such that false or incomplete tasks, shown first.
+            task.setTaskTitle(tasks.get(0).get("task_state").toString());
+            List<HashMap> tempList = tasks.stream().sorted((Comparator.comparing(o -> o.get("task_state").toString()))).collect(Collectors.toList());
+            LinkedList<HashMap> sortedTasks = new LinkedList<>();
+            sortedTasks.addAll(tempList);
+
+            return sortedTasks;
 
     }
 
@@ -93,3 +102,4 @@ public class TaskListService {
     }
 
 }
+
