@@ -22,20 +22,20 @@ public class TaskListService {
     private Task task;
     private AppUser user;
     private final ResultSetService resultSetService;
-    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
+    private AppUserService appUserService;
+    //private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
 
     public TaskListService(ResultSetService resultSetService) {
         this.resultSetService = resultSetService;
-    }
 
+    }
 
     //    TODO create database call to ORM to persist task
     public boolean addTask(Task newTask) {
-        if (newTask == null || newTask.getTaskMessage().trim().isEmpty()) {
-            return true;
-            //throw new InvalidEntryException("Invalid entry, please try again.");
-
+        if (newTask == null || newTask.getTaskMessage().trim().isEmpty() || newTask.getTaskMessage().length() > 255) {
+            System.out.println("error1");
+            return false;
 
         } else if (newTask != null) {
             try {
@@ -46,9 +46,11 @@ public class TaskListService {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("error");
             }
         }
-        return false;
+        System.out.println("lol");
+        return true;
     }
 
     //    TODO create db call to remove task from task table by ID
@@ -57,7 +59,7 @@ public class TaskListService {
         task.setTaskId(taskId);
 
         if (taskId <= 0) {
-            return true;
+            return false;
         } else {
             try {
                 resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
@@ -65,38 +67,38 @@ public class TaskListService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return false;
+            return true;
         }
     }
 
     // TODO create db call that gets all tasks by username
     public LinkedList<HashMap> getAllTasksByUsername(String username) throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
-
+        appUserService = AppState.getInstance().getAppUserService();
         AppUser user = appUserService.findUserByUsername(username);
         int userId = user.getUserID();
-        Task task = new Task();
-        task.setUserId(userId);
 
-        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
-        if (tasks == null) {
-            throw new ResourceNotFoundException();
+            Task task = new Task();
+            task.setUserId(userId);
+
+            LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
+
+            //used to organize the tasks by task_state, such that false or incomplete tasks, shown first.
+            task.setTaskTitle(tasks.get(0).get("task_state").toString());
+            List<HashMap> tempList = tasks.stream().sorted((Comparator.comparing(o -> o.get("task_state").toString()))).collect(Collectors.toList());
+            LinkedList<HashMap> sortedTasks = new LinkedList<>();
+            sortedTasks.addAll(tempList);
+
+            return sortedTasks;
+
         }
-        task.setTaskTitle(tasks.get(0).get("task_state").toString());
-        List<HashMap> tempList = tasks.stream().sorted((Comparator.comparing(o -> o.get("task_state").toString()))).collect(Collectors.toList());
-        LinkedList<HashMap> sortedTasks= new LinkedList<>();
-        sortedTasks.addAll(tempList);
 
-        return sortedTasks;
 
+        // TODO create db call that gets all tasks by username
+        public LinkedList<HashMap> getAllUncompletedTasks () throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
+            Task task1 = new Task();
+            task1.setTaskState(false);
+            LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
+            return tasks;
+        }
     }
 
-    // TODO create db call that gets all tasks by username
-    public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
-        Task task1 = new Task();
-        task1.setTaskState(false);
-        LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
-
-        return tasks;
-    }
-
-}
