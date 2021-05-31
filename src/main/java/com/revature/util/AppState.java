@@ -9,7 +9,7 @@ import com.revature.util.datasource.ConnectionFactory;
 public class AppState {
 
     private static AppState appState;
-    private static ResultSetService resultSetService = new ResultSetService();
+    private static ResultSetDTO resultSetDTO = new ResultSetDTO();
     private static AppUserService appUserService;
 
     private AppState() {
@@ -33,18 +33,18 @@ public class AppState {
         }
         return appState;
     }
-    public static ResultSetService getResultService(){
-        return resultSetService;
+    public static ResultSetDTO getResultService(){
+        return resultSetDTO;
     }
 
     public static AppUserService getAppUserService(){
-        return new AppUserService(resultSetService);
+        return new AppUserService(resultSetDTO);
     }
 
     public static TaskListService getTaskListService(){
-        return new TaskListService(resultSetService);
+        return new TaskListService(resultSetDTO);
     }
 
-    public static TaskService getTaskService() { return new TaskService(resultSetService); };
+    public static TaskService getTaskService() { return new TaskService(resultSetDTO); };
 
 }

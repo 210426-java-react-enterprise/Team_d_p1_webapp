@@ -7,7 +7,7 @@ import com.revature.exception.ImproperConfigurationException;
 import com.revature.exceptions.ResourceNotFoundException;
 import com.revature.statements.StatementType;
 import com.revature.util.AppState;
-import com.revature.util.ResultSetService;
+import com.revature.util.ResultSetDTO;
 
 import java.sql.SQLException;
 import java.util.Comparator;
@@ -21,35 +21,33 @@ public class TaskListService {
     private Task newTask;
     private Task task;
     private AppUser user;
-    private final ResultSetService resultSetService;
-    private AppUserService appUserService;
-    //private final AppUserService appUserService = AppState.getInstance().getAppUserService();
+    private final ResultSetDTO resultSetDTO;
+    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
 
 
-    public TaskListService(ResultSetService resultSetService) {
-        this.resultSetService = resultSetService;
-
+    public TaskListService(ResultSetDTO resultSetDTO) {
+        this.resultSetDTO = resultSetDTO;
     }
+
 
     //    TODO create database call to ORM to persist task
     public boolean addTask(Task newTask) {
-        if (newTask == null || newTask.getTaskMessage().trim().isEmpty() || newTask.getTaskMessage().length() > 255) {
-            System.out.println("error1");
+        if (newTask == null || newTask.getTaskMessage().trim().isEmpty()) {
             return false;
+            //throw new InvalidEntryException("Invalid entry, please try again.");
+
 
         } else if (newTask != null) {
             try {
-                Task returnsTask = resultSetService.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
+                Task returnsTask = resultSetDTO.resultSetForSingleTask(StatementType.INSERT.createStatementWithCondition(newTask, "user_id"));
 
                 System.out.println(returnsTask);
                 System.out.println("Hypothetical task has been added: " + newTask.toString());
 
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("error");
             }
         }
-        System.out.println("lol");
         return true;
     }
 
@@ -62,7 +60,7 @@ public class TaskListService {
             return false;
         } else {
             try {
-                resultSetService.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
+                resultSetDTO.resultSetForSingleTask(StatementType.DELETE.createStatementWithCondition(task, "task_id"));
                 System.out.println("Task has been deleted");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -76,11 +74,13 @@ public class TaskListService {
         appUserService = AppState.getInstance().getAppUserService();
         AppUser user = appUserService.findUserByUsername(username);
         int userId = user.getUserID();
+        Task task = new Task();
+        task.setUserId(userId);
 
-            Task task = new Task();
-            task.setUserId(userId);
-
-            LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
+        LinkedList<HashMap> tasks = resultSetDTO.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task, "user_id"));
+        if (tasks == null) {
+            throw new ResourceNotFoundException();
+        }
 
             //used to organize the tasks by task_state, such that false or incomplete tasks, shown first.
             task.setTaskTitle(tasks.get(0).get("task_state").toString());
@@ -90,15 +90,16 @@ public class TaskListService {
 
             return sortedTasks;
 
-        }
-
-
-        // TODO create db call that gets all tasks by username
-        public LinkedList<HashMap> getAllUncompletedTasks () throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
-            Task task1 = new Task();
-            task1.setTaskState(false);
-            LinkedList<HashMap> tasks = resultSetService.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
-            return tasks;
-        }
     }
+
+    // TODO create db call that gets all tasks by username
+    public LinkedList<HashMap> getAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
+        Task task1 = new Task();
+        task1.setTaskState(false);
+        LinkedList<HashMap> tasks = resultSetDTO.resultSetToLinkedListTask(StatementType.SELECT.createStatementWithCondition(task1, "task_state"));
+
+        return tasks;
+    }
+
+}
 

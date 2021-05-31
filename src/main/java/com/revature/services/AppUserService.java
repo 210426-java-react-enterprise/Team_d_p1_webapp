@@ -7,7 +7,7 @@ import com.revature.exceptions.invalid.InvalidEmailException;
 import com.revature.exceptions.invalid.InvalidPasswordException;
 import com.revature.exceptions.invalid.InvalidUsernameException;
 import com.revature.statements.StatementType;
-import com.revature.util.ResultSetService;
+import com.revature.util.ResultSetDTO;
 
 import java.sql.SQLException;
 import java.util.regex.Pattern;
@@ -16,10 +16,10 @@ public class AppUserService {
     private final Pattern userNamePattern = Pattern.compile("[A-Za-z0-9_]+");
     private final Pattern passwordPattern = Pattern.compile("[A-Za-z0-9_!@#$%&*]+");
     private final Pattern emailPattern = Pattern.compile("^\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$");
-    private final ResultSetService resultSetService;
+    private final ResultSetDTO resultSetDTO;
 
-    public AppUserService(ResultSetService resultSetService) {
-        this.resultSetService = resultSetService;
+    public AppUserService(ResultSetDTO resultSetDTO) {
+        this.resultSetDTO = resultSetDTO;
     }
 
     public boolean isValidUsername(String username){
@@ -67,7 +67,7 @@ public class AppUserService {
         user.setUsername(username);
         user.setPassword(password);
 
-        AppUser loggedInUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username", "password"));
+        AppUser loggedInUser = resultSetDTO.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username", "password"));
         if(loggedInUser == null) {
             throw new UserNotFoundException("Username not found, please check credentials and try again");
         }
@@ -81,7 +81,7 @@ public class AppUserService {
         AppUser user = new AppUser();
         user.setUsername(username);
 
-        AppUser validatedUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
+        AppUser validatedUser = resultSetDTO.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
         System.out.println("validated user rs:" + validatedUser);
 
         return validatedUser.getPassword() == null;
@@ -92,7 +92,7 @@ public class AppUserService {
         AppUser user = new AppUser();
         user.setEmail(email);
 
-        AppUser validatedUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "email"));
+        AppUser validatedUser = resultSetDTO.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "email"));
 
         return validatedUser.getPassword() == null;
     }
@@ -104,7 +104,7 @@ public class AppUserService {
         user.setUsername(username);
 
         try {
-            resultUser = resultSetService.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
+            resultUser = resultSetDTO.resultSetToUser(StatementType.SELECT.createStatementWithCondition(user, "username"));
         } catch (Exception e) {
             e.printStackTrace();
         }
