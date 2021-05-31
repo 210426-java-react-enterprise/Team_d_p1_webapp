@@ -109,7 +109,9 @@ public class TaskService {
             actualTask.setTaskState(!actualTask.getTaskState());
             StatementType.UPDATE.createStatementWithCondition(actualTask, "task_id");
         } catch (Exception e) {
+
             e.printStackTrace();
+            return false;
         }
 
         return true;
