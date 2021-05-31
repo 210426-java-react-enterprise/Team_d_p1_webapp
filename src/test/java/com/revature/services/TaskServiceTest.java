@@ -1,10 +1,21 @@
 package com.revature.services;
 
+import com.revature.entities.Task;
+import com.revature.exception.ImproperConfigurationException;
+import com.revature.exceptions.DateFormatException;
+import com.revature.exceptions.MessageLengthOutOfBoundsException;
+import com.revature.exceptions.TitleLengthOutOFBoundsException;
+import com.revature.util.ResultSetDTO;
 import org.junit.Test;
 import org.junit.Before; 
 import org.junit.After;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import java.sql.SQLException;
 
 import static org.junit.Assert.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 /** 
 * TaskService Tester. 
@@ -14,107 +25,44 @@ import static org.junit.Assert.*;
 * @version 1.0 
 */ 
 public class TaskServiceTest {
+
+    @InjectMocks
     TaskService sut;
 
-@Before
-public void before() throws Exception {
+    @Mock
+    ResultSetDTO mockResultSetDTO;
 
-} 
+@Before
+public void before() throws Exception { openMocks(this); }
 
 @After
 public void after() throws Exception {
     sut = null;
 } 
 
-/** 
-* 
-* Method: updateTaskContent(String newContent) 
-* 
-*/ 
-@Test
-public void testUpdateTaskContent() throws Exception { 
-//TODO: Test goes here... 
-} 
+@Test (expected = MessageLengthOutOfBoundsException.class)
+    public void testMessageLengthValidation() throws SQLException, ImproperConfigurationException {
+    Task task = new Task();
+    task.setTaskId(500);
+    String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris viverra varius sem, nec accumsan risus pretium sit amet. Nulla laoreet risus vel quam tristique porta. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per massa nunc. Words";
+    sut.updateTaskContent(task.getTaskId(), message);
+}
 
-/** 
-* 
-* Method: addTaskContent(String additionalContent) 
-* 
-*/ 
-@Test
-public void testAddTaskContent() throws Exception { 
-//TODO: Test goes here... 
-} 
+@Test (expected = TitleLengthOutOFBoundsException.class)
+    public void testTitleLengthOutOfBounds() throws SQLException, ImproperConfigurationException {
+    Task task = new Task();
+    task.setTaskId(500);
+    String title = "Very long super long dude so long title man this is so long its the longest title ever.";
+    sut.updateTaskTitle(task.getTaskId(), title);
+}
 
-/** 
-* 
-* Method: updateTaskDueDate(LocalDateTime newDueDate) 
-* 
-*/ 
-@Test
-public void testUpdateTaskDueDate() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: updateTaskTitle(String newTitle) 
-* 
-*/ 
-@Test
-public void testUpdateTaskTitle() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: updatePublicView() 
-* 
-*/ 
-@Test
-public void testUpdatePublicView() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: addTaskToTaskList() 
-* 
-*/ 
-@Test
-public void testAddTaskToTaskList() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: saveTaskToDB() 
-* 
-*/ 
-@Test
-public void testSaveTaskToDB() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: getTaskFromDB() 
-* 
-*/ 
-@Test
-public void testGetTaskFromDB() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: taskCompleted() 
-* 
-*/ 
-@Test
-public void testTaskCompleted() throws Exception { 
-//TODO: Test goes here... 
-} 
+@Test (expected = DateFormatException.class)
+    public void testDateOutOfFormatException() throws SQLException, ImproperConfigurationException {
+    Task task = new Task();
+    task.setTaskId(500);
+    String date = "113/223/29";
+    sut.updateTaskDueDate(task.getTaskId(), date);
+}
 
 
 } 
