@@ -1,10 +1,11 @@
 package com.revature.services;
 
-import org.junit.Test;
-import org.junit.Before; 
+import com.revature.util.ResultSetService;
 import org.junit.After;
-
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 /** 
 * TaskService Tester. 
@@ -14,107 +15,67 @@ import static org.junit.Assert.*;
 * @version 1.0 
 */ 
 public class TaskServiceTest {
+
+    @InjectMocks
     TaskService sut;
 
-@Before
-public void before() throws Exception {
 
-} 
+    @Mock
+    ResultSetService mockResultSetService;
 
-@After
-public void after() throws Exception {
-    sut = null;
-} 
 
-/** 
-* 
-* Method: updateTaskContent(String newContent) 
-* 
-*/ 
-@Test
-public void testUpdateTaskContent() throws Exception { 
+    @Before
+    public void before() throws Exception {
+
+    }
+
+    @After
+    public void after() throws Exception {
+        sut = null;
+    }
+
+
+
+
+    /**
+     * Method: updateTaskContent(int taskId, String newContent)
+     */
+    @Test
+    public void testUpdateTaskContent() throws Exception {
 //TODO: Test goes here... 
-} 
+    }
 
-/** 
-* 
-* Method: addTaskContent(String additionalContent) 
-* 
-*/ 
-@Test
-public void testAddTaskContent() throws Exception { 
+
+    /**
+     * Method: updateTaskTitle(int taskId, String newTitle)
+     */
+
+    @Test
+    public void testUpdateTaskTitle() throws Exception {
 //TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: updateTaskDueDate(LocalDateTime newDueDate) 
-* 
-*/ 
-@Test
-public void testUpdateTaskDueDate() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: updateTaskTitle(String newTitle) 
-* 
-*/ 
-@Test
-public void testUpdateTaskTitle() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: updatePublicView() 
-* 
-*/ 
-@Test
-public void testUpdatePublicView() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: addTaskToTaskList() 
-* 
-*/ 
-@Test
-public void testAddTaskToTaskList() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: saveTaskToDB() 
-* 
-*/ 
-@Test
-public void testSaveTaskToDB() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: getTaskFromDB() 
-* 
-*/ 
-@Test
-public void testGetTaskFromDB() throws Exception { 
-//TODO: Test goes here... 
-} 
-
-/** 
-* 
-* Method: taskCompleted() 
-* 
-*/ 
-@Test
-public void testTaskCompleted() throws Exception { 
-//TODO: Test goes here... 
-} 
+    }
 
 
-} 
+    /**
+     * Method: updateDueDate(int taskId, String newTitle)
+     */
+
+    @Test
+    public void testUpdateDueDate() throws Exception {
+        //TODO: Test goes here...
+    }
+
+
+    /**
+     * Method: updateTaskState(int taskId)
+     */
+
+
+    @Test
+    public void testUpdateTaskState() throws Exception {
+        //TODO: Test goes here...
+
+    }
+}
+
+
