@@ -45,7 +45,7 @@ public class TaskListServlet extends HttpServlet {
 
             Task newTask = new Task(dateDue, title, message, user.getUserID());
 
-            if (taskListService.addTask(newTask) == true) {
+            if (taskListService.addTask(newTask) == false) {
                 resp.setStatus(400);
                 resp.getWriter().print("Task cannot have null entry.");
             } else {
@@ -151,6 +151,7 @@ public class TaskListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("get route fired");
         try {
             LinkedList<HashMap> tasks;
             HttpSession session = req.getSession(false);

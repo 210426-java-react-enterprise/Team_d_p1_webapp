@@ -216,7 +216,7 @@ public class TaskListServiceTest {
      * Method: getAllUncompletedTasks()
      */
     @Test
-    public LinkedList<HashMap> testGetAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
+    public void testGetAllUncompletedTasks() throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
         Task task1 = new Task();
         task1.setTaskState(false);
 
@@ -229,8 +229,8 @@ public class TaskListServiceTest {
 
             //Assert that the userID of one of the hasmaps is equal to the one recieved.
 
-//            LinkedList<HashMap> returnedValue = sut.getAllUncompletedTasks();
-//           // Assert.assertNotEquals(returnedValue, rs);
+            LinkedList<HashMap> returnedValue = sut.getAllUncompletedTasks();
+            Assert.assertNotEquals(returnedValue, rs);
 //            Assert.assertSame(returnedValue, rs);
 
         } catch (Exception e) {
@@ -239,8 +239,6 @@ public class TaskListServiceTest {
 
         }
 
-
-        return null;
     }
 }
 
