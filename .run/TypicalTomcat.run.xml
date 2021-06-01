@@ -1,0 +1,28 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="TypicalTomcat" type="com.poratu.idea.plugins.tomcat" factoryName="SMART_TOMCAT_FACTORY">
+    <option name="adminPort" value="8005" />
+    <option name="contextPath" value="/TaskForce" />
+    <option name="docBase" value="C:\Users\nickr\OneDrive\Desktop\Revature\TaskForce\Team_d_p1_webapp\src\main\webapp" />
+    <option name="envOptions">
+      <map>
+        <entry key="db_password" value="revature" />
+        <entry key="db_username" value="postgres" />
+        <entry key="host_url" value="task-force.c2iiztx3t7wq.us-east-1.rds.amazonaws.com" />
+      </map>
+    </option>
+    <option name="passParentEnvironmentVariables" value="true" />
+    <option name="port" value="8080" />
+    <option name="tomcatInfo">
+      <TomcatInfo>
+        <option name="name" value="Apache Tomcat/9.0.46" />
+        <option name="number" value="0" />
+        <option name="path" value="C:\Users\nickr\OneDrive\Documents\Apache\apache-tomcat-9.0.46" />
+        <option name="version" value="9.0.46.0" />
+      </TomcatInfo>
+    </option>
+    <option name="vmOptions" value="" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
