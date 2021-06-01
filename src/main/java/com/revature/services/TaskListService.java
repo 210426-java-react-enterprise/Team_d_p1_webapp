@@ -25,8 +25,9 @@ public class TaskListService {
     private AppUserService appUserService;
 
 
-    public TaskListService(ResultSetDTO resultSetDTO) {
+    public TaskListService(ResultSetDTO resultSetDTO,AppUserService appUserService) {
         this.resultSetDTO = resultSetDTO;
+        this.appUserService = appUserService;
     }
 
 
@@ -71,7 +72,6 @@ public class TaskListService {
 
     // TODO create db call that gets all tasks by username
     public LinkedList<HashMap> getAllTasksByUsername(String username) throws ImproperConfigurationException, SQLException, ResourceNotFoundException {
-        appUserService = AppState.getInstance().getAppUserService();
         AppUser user = appUserService.findUserByUsername(username);
         int userId = user.getUserID();
         Task task = new Task();

@@ -118,7 +118,7 @@ public class TaskServiceTest {
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.UPDATE.createStatementWithCondition(any())).thenReturn(rs);
             when(mockResultSetDTO.resultSetForSingleTask(any())).thenReturn(task);
-            assertTrue(sut.updateTaskContent(task.getTaskId(), task.getTaskTitle()));
+            assertTrue(sut.updateTaskTitle(task.getTaskId(), task.getTaskTitle()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,7 +135,24 @@ public class TaskServiceTest {
             when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
             when(mockStatementType.UPDATE.createStatementWithCondition(any())).thenReturn(rs);
             when(mockResultSetDTO.resultSetForSingleTask(any())).thenReturn(task);
-            assertTrue(sut.updateTaskContent(task.getTaskId(), task.getDateDue()));
+            assertTrue(sut.updateTaskDueDate(task.getTaskId(), task.getDateDue()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void validTaskDueDateUpdateError() {
+        Task task = new Task();
+        task.setTaskId(500);
+        task.setDateDue("1/11/2010");
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("update")).thenReturn(mockStatementBuilder);
+            when(mockStatementBuilder.buildStatement(any())).thenReturn(rs);
+            when(mockStatementType.UPDATE.createStatementWithCondition(any())).thenReturn(rs);
+            when(mockResultSetDTO.resultSetForSingleTask(any())).thenThrow(new SQLException());
+            assertFalse(sut.updateTaskDueDate(task.getTaskId(), task.getDateDue()));
         } catch (Exception e) {
             e.printStackTrace();
         }

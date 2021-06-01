@@ -27,12 +27,12 @@ public class AppState {
         ORMState ormState = ORMState.getInstance();
     }
 
-    public static AppState getInstance() {
-        if (appState == null) {
-            appState = new AppState();
-        }
-        return appState;
-    }
+//    public static AppState getInstance() {
+//        if (appState == null) {
+//            appState = new AppState();
+//        }
+//        return appState;
+//    }
     public static ResultSetDTO getResultService(){
         return resultSetDTO;
     }
@@ -42,7 +42,7 @@ public class AppState {
     }
 
     public static TaskListService getTaskListService(){
-        return new TaskListService(resultSetDTO);
+        return new TaskListService(resultSetDTO,new AppUserService(resultSetDTO));
     }
 
     public static TaskService getTaskService() { return new TaskService(resultSetDTO); };

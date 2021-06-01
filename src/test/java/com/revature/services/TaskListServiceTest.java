@@ -79,13 +79,11 @@ public class TaskListServiceTest {
     @Mock
     StatementBuilder mockStatementBuilder;
 
-
     @Mock
     AppUserService appUserService;
 
     @Mock
     ResultSet rs;
-
 
     @Before
     public void before() throws Exception {
@@ -101,7 +99,6 @@ public class TaskListServiceTest {
         mockStatementBuilder = null;
         mockStatementType = null;
         appUserService = null;
-
     }
 
 
@@ -199,18 +196,41 @@ public class TaskListServiceTest {
     }
 
 
-//    @Test
-//    public void testGetAllTasksByUsername() throws ImproperConfigurationException, Exception {
-//        Task userTask = new Task();
-//        userTask.setUserId(5);
-//        AppUser goodUser = mock(AppUser.class);
-//        when(appUserService.findUserByUsername("username")).thenReturn(goodUser);
-//
-//        sut.getAllTasksByUsername("username");
-//
-//
-//
-//    }
+    @Test
+    public void testGetAllTasksByUsername() throws ImproperConfigurationException, Exception {
+        Task userTask = new Task();
+        userTask.setUserId(5);
+        AppUser goodUser = mock(AppUser.class);
+        goodUser.setUserID(userTask.getUserId());
+        LinkedList<HashMap> listToReturn = new LinkedList<>();
+        for(int i = 0; i<4;i++){
+            HashMap<String,String> testMap = new HashMap<>();
+            testMap.put("task_state","true");
+            listToReturn.add(testMap);
+        }
+        HashMap<String,String> testMap = new HashMap<>();
+        testMap.put("task_state","false");
+        listToReturn.add(testMap);
+
+
+        when(appUserService.findUserByUsername("username")).thenReturn(goodUser);
+        when(mockResultSetDTO.resultSetToLinkedListTask(any())).thenReturn(listToReturn);
+        try (MockedStatic<ORMState> mockORMstate = Mockito.mockStatic(ORMState.class)) {
+            mockORMstate.when((MockedStatic.Verification) ORMState.getStatementBuilder(any())).thenReturn(mockStatementBuilder);
+            when(ORMState.getStatementBuilder("select")).thenReturn(mockStatementBuilder);
+            when(appUserService.findUserByUsername(any())).thenReturn(goodUser);
+            LinkedList<HashMap> returnedList = sut.getAllTasksByUsername("username");
+            assertEquals(returnedList.getFirst().get("task_state"),"false");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+    }
 
     /**
      * Method: getAllUncompletedTasks()
@@ -230,7 +250,7 @@ public class TaskListServiceTest {
             //Assert that the userID of one of the hasmaps is equal to the one recieved.
 
             LinkedList<HashMap> returnedValue = sut.getAllUncompletedTasks();
-            Assert.assertNotEquals(returnedValue, rs);
+            assertNotEquals(returnedValue, rs);
 //            Assert.assertSame(returnedValue, rs);
 
         } catch (Exception e) {

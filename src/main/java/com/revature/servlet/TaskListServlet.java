@@ -26,8 +26,8 @@ import java.util.Map;
 public class TaskListServlet extends HttpServlet {
 
     private final TaskListService taskListService = AppState.getTaskListService();
-    private final TaskService taskService = AppState.getInstance().getTaskService();
-    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
+    private final TaskService taskService = AppState.getTaskService();
+    private final AppUserService appUserService = AppState.getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,  IOException {

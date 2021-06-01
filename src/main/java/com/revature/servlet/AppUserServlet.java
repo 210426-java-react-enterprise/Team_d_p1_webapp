@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class AppUserServlet extends HttpServlet {
 
-    private final AppUserService appUserService = AppState.getInstance().getAppUserService();
+    private final AppUserService appUserService = AppState.getAppUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException {
